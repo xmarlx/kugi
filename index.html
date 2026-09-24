@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>釘読みノート</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="釘読み">
+<meta name="theme-color" content="#b08a2e">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e9edf0;--panel:#fff;--ink:#1d2a33;--sub:#5b6b76;--line:#c9d2d8;--brass:#b08a2e;--plus:#1f7a4d;--minus:#b3362f;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12181c;--panel:#1b242a;--ink:#e6ecef;--sub:#93a3ad;--line:#2e3a42;--brass:#d6ad4a;--plus:#45b27c;--minus:#e0645b}}
+:root[data-theme="dark"]{--bg:#12181c;--panel:#1b242a;--ink:#e6ecef;--sub:#93a3ad;--line:#2e3a42;--brass:#d6ad4a;--plus:#45b27c;--minus:#e0645b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;line-height:1.6}
+main{max-width:640px;margin:0 auto;padding:16px}
+h1{font-weight:900;font-size:1.6rem;margin:8px 0 4px}
+h2{font-size:1.05rem;margin:0 0 10px;border-left:4px solid var(--brass);padding-left:8px}
+.sec{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin:14px 0}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+label{font-size:.85rem;color:var(--sub)}
+input,select{font:inherit;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);width:100%}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.seg button{font:inherit;padding:10px 0;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);cursor:pointer}
+.seg button.on{background:var(--brass);color:#fff;border-color:var(--brass)}
+.btn{font:inherit;font-weight:700;padding:12px;border-radius:8px;border:none;background:var(--brass);color:#fff;cursor:pointer;flex:1}
+.btn.alt{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.5}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.res div{background:var(--bg);border-radius:8px;padding:8px;font-size:.85rem}
+.res b{display:block;font-size:1.25rem}
+.pos{color:var(--plus)}.neg{color:var(--minus)}
+.note{font-size:.8rem;color:var(--sub)}
+.warn{font-size:.85rem;color:var(--minus)}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.slot{border:1px dashed var(--line);border-radius:8px;padding:8px;text-align:center}
+.slot img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;background:var(--bg);display:block;margin-bottom:6px}
+.slot img:not([src]){visibility:hidden}
+.cam{position:relative;width:100%;aspect-ratio:4/3;background:#000;border-radius:8px;overflow:hidden}
+#adj img{position:absolute}
+.cam video,.cam svg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cam svg *{fill:none;stroke:#ffd23f;stroke-width:2}.cam svg .d{stroke-dasharray:6 4;stroke-width:1.5}.cam svg .g{stroke:#fff;stroke-opacity:.4;stroke-width:1}
+.cam svg text{fill:#ffd23f;stroke:none;font-size:13px;text-anchor:middle}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:10;padding:calc(env(safe-area-inset-top,0px) + 12px) 12px calc(env(safe-area-inset-bottom,0px) + 12px);overflow:auto}
+.ov .in{max-width:560px;margin:0 auto;color:#fff}
+.ov .note{color:#ddd}
+.rec{display:grid;grid-template-columns:72px 1fr auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.rec img{width:72px;height:54px;object-fit:cover;border-radius:4px;background:var(--bg)}
+.rec.sel{background:color-mix(in srgb,var(--brass) 15%,transparent)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cmp img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;background:var(--bg)}
+details summary{cursor:pointer;font-weight:700}
+.smp{width:100%;max-width:260px;height:auto;display:block;margin:6px 0;border-radius:8px}
+</style></head><body><main>
+<h1>釘読みノート</h1>
+<p class="note">ヘソを真上・真横から撮る → ヘソ幅と上げ下げを記録 → 実戦で回転率を測る → 同じ機種の過去記録と比べて台を選ぶ。</p>
+
+<section class="sec">
+<h2>台情報</h2>
+<div class="grid2">
+<div><label for="kishu">機種名</label><input id="kishu" list="kishuList"><datalist id="kishuList"></datalist></div>
+<div><label for="dai">台番号</label><input id="dai" inputmode="numeric"></div>
+<div><label for="border">ボーダー（回/1000円）</label><input id="border" type="number" step="0.1" value="18"></div>
+<div><label for="rate">換金率（1玉あたり）</label><select id="rate"><option value="4">等価（4円）</option><option value="3.57">28玉（3.57円）</option><option value="3.33">30玉（3.33円）</option><option value="3.03">33玉（3.03円）</option></select></div>
+</div>
+</section>
+
+<section class="sec">
+<h2>ヘソを撮影</h2>
+<div class="shots">
+<div class="slot"><img id="imgTop" alt="真上の写真"><b>真上</b><div class="note">ヘソ幅を見る</div>
+<div class="row" style="margin-top:6px"><button class="btn" data-cam="top">カメラ</button></div>
+<label class="note" style="display:block;margin-top:6px">写真を選ぶ・撮る（撮影後にガイドで位置合わせ）<input type="file" accept="image/*" data-file="top"></label></div>
+<div class="slot"><img id="imgSide" alt="真横の写真"><b>真横</b><div class="note">上げ／下げを見る</div>
+<div class="row" style="margin-top:6px"><button class="btn" data-cam="side">カメラ</button></div>
+<label class="note" style="display:block;margin-top:6px">写真を選ぶ・撮る（撮影後にガイドで位置合わせ）<input type="file" accept="image/*" data-file="side"></label></div>
+</div>
+<p class="note" id="camMsg" role="status"></p>
+<details style="margin-top:6px"><summary>撮り方の見本</summary>
+<p class="note"><b>真上</b>：ヘソ釘2本の真上からスマホを下に向け、2本の釘の頭とその間のすき間が大きく写るように接写する。釘の頭をガイドの丸に合わせる。</p>
+<svg class="smp" viewBox="0 0 300 225" role="img" aria-label="真上からの撮影見本"><rect width="300" height="225" fill="#dfe6ea"/>
+<rect x="95" y="150" width="110" height="40" rx="4" fill="#c9a33d"/><text x="150" y="176" font-size="12" text-anchor="middle" fill="#1d2a33">入賞口</text>
+<circle cx="105" cy="112" r="16" fill="#8a7440"/><circle cx="195" cy="112" r="16" fill="#8a7440"/>
+<circle cx="150" cy="105" r="30" fill="none" stroke="#6b7780" stroke-dasharray="4 3"/><text x="150" y="60" font-size="11" text-anchor="middle" fill="#1d2a33">玉(11mm)が通るすき間＝ヘソ幅</text>
+<line x1="121" y1="135" x2="179" y2="135" stroke="#b3362f" stroke-width="2"/></svg>
+<p class="note"><b>真横</b>：ガラスに沿ってスマホを横から当て、ヘソ釘を真横から見る。盤面の板と釘の根元がはっきり写るようにし、板の面をガイドの縦線に合わせる。</p>
+<svg class="smp" viewBox="0 0 300 225" role="img" aria-label="真横からの撮影見本"><rect width="300" height="225" fill="#dfe6ea"/>
+<rect x="40" y="20" width="22" height="185" fill="#b9a680"/><text x="51" y="215" font-size="11" text-anchor="middle" fill="#1d2a33">盤面の板</text>
+<line x1="62" y1="70" x2="220" y2="58" stroke="#1f7a4d" stroke-width="5"/><text x="235" y="58" font-size="11" fill="#1f7a4d">上げ</text>
+<line x1="62" y1="112" x2="220" y2="112" stroke="#1d2a33" stroke-width="5"/><text x="235" y="116" font-size="11" fill="#1d2a33">フラット</text>
+<line x1="62" y1="155" x2="220" y2="168" stroke="#b3362f" stroke-width="5"/><text x="235" y="172" font-size="11" fill="#b3362f">下げ</text></svg>
+<p class="note">上げ＝最もプラス、フラット＝プラス、下げ＝マイナス。釘の根元（板に刺さっている部分）を見ると判断しやすい。</p>
+</details>
+</section>
+
+<section class="sec" id="judgeSec">
+<h2>ヘソ判定</h2>
+<div class="row"><button class="btn" id="judge">写真から判定</button><button class="btn alt" id="stop" hidden>停止</button></div>
+<p class="note" id="aiOut" style="white-space:pre-wrap"></p>
+<details style="margin-top:12px"><summary>写真判定の設定</summary>
+<p class="note">写真判定はAnthropic APIを使います。<a href="https://console.anthropic.com/" target="_blank" rel="noopener">console.anthropic.com</a>でAPIキーを発行して入力してください。判定1回ごとに料金がかかります。キーはこのiPhoneのSafari内だけに保存されます。</p>
+<label for="apiKey">APIキー</label><input id="apiKey" type="password" autocomplete="off" placeholder="sk-ant-...">
+<label for="apiModel">モデル</label><input id="apiModel" value="claude-sonnet-5">
+<div class="row" style="margin-top:8px"><button class="btn alt" id="apiSave">保存</button></div>
+<p class="note" id="apiMsg"></p>
+</details>
+<div class="grid2">
+<div><label for="width">ヘソ幅（mm）</label><select id="width"></select></div>
+<div><label>ヘソ釘の角度</label><div class="seg" id="angle"><button data-v="上げ">上げ</button><button data-v="フラット" class="on">フラット</button><button data-v="下げ">下げ</button></div></div>
+</div>
+<p class="note">0.25mm＝板1枚。1枚開くと回転率は約1回転上がる（機種により0.8〜1.2回転）。</p>
+<div id="cmpBox"></div>
+</section>
+
+<section class="sec">
+<h2>回転率計測</h2>
+<div class="res">
+<div>投資<b id="inv">0円</b></div>
+<div>通常回転<b id="spin">0</b></div>
+<div>1000円あたり<b id="per">—</b></div>
+</div>
+<p class="warn" id="spinWarn"></p>
+<div class="row" style="margin-top:6px">
+<button class="btn" id="add500">500円投入</button>
+<button class="btn" id="addSpin">回転 +1</button>
+</div>
+<div class="row" style="margin-top:8px">
+<button class="btn alt" id="add10">回転 +10</button>
+<button class="btn alt" id="undo">取り消し</button>
+<button class="btn alt" id="reset">リセット</button>
+</div>
+<div class="grid2" style="margin-top:10px">
+<div><label for="invIn">投資額を直接入力（円）</label><input id="invIn" type="number" step="500"></div>
+<div><label for="spinIn">回転数を直接入力</label><input id="spinIn" type="number"></div>
+</div>
+</section>
+
+<section class="sec">
+<h2>期待値（概算）</h2>
+<div class="grid2">
+<div><label for="sph">1時間の回転数</label><input id="sph" type="number" value="200"></div>
+<div><label for="hours">稼働時間（h）</label><input id="hours" type="number" step="0.5" value="8"></div>
+</div>
+<div class="res" style="margin-top:10px">
+<div>ボーダー差<b id="diff">—</b></div>
+<div>時給<b id="hourly">—</b></div>
+<div>日当<b id="daily">—</b></div>
+</div>
+<p class="note">実測の回転率で計算。実測がない場合は、過去記録からの予想回転率で計算。1000円あたり期待値 ≒ (回転率 ÷ ボーダー − 1) × 1000円。持ち玉比率・出玉削りは未考慮。</p>
+</section>
+
+<section class="sec">
+<h2>仕事量（稼働後）</h2>
+<p class="note">その日いくら勝つはずだったか。大当りの運を除いた、実際に積んだ期待値。稼働が終わったら毎回計算する。</p>
+<div class="grid2">
+<div><label for="wBal">実収支（円）</label><input id="wBal" type="number" step="1000" placeholder="-46000"></div>
+<div><label for="wR">総R数</label><input id="wR" type="number" placeholder="112"></div>
+<div><label for="wSpin">通常時総回転数</label><input id="wSpin" type="number" placeholder="計測の回転数を使用"></div>
+<div><label for="wProb">1Rトータル確率（1/○の○）</label><input id="wProb" type="number" step="0.01" placeholder="9.33"></div>
+<div><label for="wOut">1R平均出玉（個）</label><input id="wOut" type="number" placeholder="140"></div>
+<div><label>換金率</label><div class="note" id="wRate" style="padding:8px 0"></div></div>
+</div>
+<div class="res" style="margin-top:10px"><div>理論R数<b id="wTheo">—</b></div><div>R数の上振れ<b id="wLuck">—</b></div><div>仕事量<b id="wWork">—</b></div></div>
+<p class="note">仕事量 ＝ 実収支 −（総R数 − 通常時総回転数 ÷ 1Rトータル確率）× 1R平均出玉 × 換金率<br>例：−46000 −（112 − 2241÷9.33）× 140 × 3.57 ≒ +18,071円</p>
+</section>
+
+<section class="sec">
+<h2>記録</h2>
+<div class="row"><button class="btn" id="save">この台を保存</button><button class="btn alt" id="csv">CSVをコピー</button></div>
+<div class="row" style="margin-top:8px"><label style="flex:1">表示する機種<select id="filter"><option value="">すべて</option></select></label></div>
+<p class="note">記録はこのiPhoneのSafari内に保存されます。機種変更やSafariのデータ削除で消えるので、ときどき「CSVをコピー」で控えを取ってください。</p>
+<p class="note">記録をタップすると「比較の基準」になります。基準は同じ機種で通常時1500回転以上回した記録がおすすめ。</p>
+<div id="log"></div>
+</section>
+</main>
+
+<div class="ov" id="ov2" hidden><div class="in">
+<p><b>ガイド線に合わせる</b></p>
+<div class="cam" id="adj" style="touch-action:none"><img id="adjImg" alt="" style="position:absolute;left:0;top:0;transform-origin:0 0;max-width:none;object-fit:unset;width:auto;height:auto"><svg id="guide2" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+<p class="note" id="guideTxt2"></p>
+<p class="note">写真をドラッグで移動、下のスライダー（2本指でも可）で拡大縮小して、ガイド線に合わせてください。</p>
+<label class="note">拡大<input id="zoom" type="range" min="0.2" max="4" step="0.01" value="1"></label>
+<label class="note">回転<input id="rot" type="range" min="-20" max="20" step="0.5" value="0"></label>
+<div class="row" style="margin-top:8px"><button class="btn" id="adjOk">この位置で決定</button><button class="btn alt" id="adjCancel">やめる</button></div>
+</div></div>
+<div class="ov" id="ov" hidden><div class="in">
+<div class="cam"><video id="vid" playsinline muted></video><svg id="guide" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+<p class="note" id="guideTxt"></p>
+<div class="row"><button class="btn" id="shoot">撮影</button><button class="btn alt" id="camClose">閉じる</button></div>
+</div></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const W=[];for(let w=11.25;w<=14.001;w+=.25)W.push(w.toFixed(2));
+$("width").innerHTML='<option value="">未入力</option>'+W.map(w=>`<option>${w}</option>`).join("");
+let angle="フラット";
+$("angle").onclick=e=>{const b=e.target.closest("button");if(!b)return;setAngle(b.dataset.v)};
+function setAngle(v){angle=v;$("angle").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.v===v));upd()}
+const ANG={"上げ":1,"フラット":0,"下げ":-1};
+let shot={top:null,side:null};
+let st={inv:0,spin:0,hist:[]};
+let logs=[];try{logs=JSON.parse(localStorage.getItem("kugi_logs2")||"[]")}catch(e){}
+let baseId=null;
+function yen(x){return (x>=0?"+":"")+Math.round(x).toLocaleString()+"円"}
+
+/* 画像縮小 */
+function toThumb(blob,max=640){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height));
+const c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.8))};im.onerror=rej;im.src=URL.createObjectURL(blob)})}
+async function setShot(k,blob){shot[k]=await toThumb(blob);$(k==="top"?"imgTop":"imgSide").src=shot[k];upd()}
+document.querySelectorAll("[data-file]").forEach(i=>i.onchange=()=>{if(i.files[0])openAdjust(i.dataset.file,i.files[0]);i.value=""});
+
+/* ガイド付きカメラ */
+const GUIDE={
+top:{svg:`<line class="g" x1="133" y1="0" x2="133" y2="300"/><line class="g" x1="267" y1="0" x2="267" y2="300"/>
+<line class="d" x1="200" y1="0" x2="200" y2="300"/><circle cx="120" cy="140" r="34"/><circle cx="280" cy="140" r="34"/>
+<rect x="110" y="200" width="180" height="60" rx="6"/><text x="200" y="236">入賞口</text><text x="120" y="92">ヘソ釘</text><text x="280" y="92">ヘソ釘</text>`,
+txt:"真上から。ヘソ釘2本の頭を丸に、すき間の中心を点線に合わせる。手ブレしないよう両手で持つ。"},
+side:{svg:`<line x1="70" y1="0" x2="70" y2="300"/><text x="70" y="290">板の面</text>
+<line class="d" x1="70" y1="150" x2="380" y2="150"/><text x="300" y="140">水平（フラット）</text>
+<line class="g" x1="70" y1="150" x2="380" y2="110"/><line class="g" x1="70" y1="150" x2="380" y2="190"/>
+<text x="360" y="100">上げ</text><text x="360" y="210">下げ</text>`,
+txt:"真横から。盤面の板を左の縦線に、ヘソ釘の根元を点線の左端に合わせる。スマホを傾けない。"}};
+let stream=null,mode=null;const vid=$("vid");
+document.querySelectorAll("[data-cam]").forEach(b=>b.onclick=async()=>{
+mode=b.dataset.cam;$("camMsg").textContent="カメラを起動中…";
+if(!navigator.mediaDevices?.getUserMedia){$("camMsg").textContent="この画面ではカメラを直接使えません。「写真を選ぶ」から撮影してください。";return}
+try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment",width:{ideal:1920}},audio:false});
+$("guide").innerHTML=GUIDE[mode].svg;$("guideTxt").textContent=GUIDE[mode].txt;$("ov").hidden=false;vid.srcObject=stream;await vid.play();$("camMsg").textContent=""}
+catch(e){$("ov").hidden=true;$("camMsg").textContent="カメラを起動できませんでした（"+(e.name||"error")+"）。iPhoneの設定 → Safari → カメラ を「許可」にしてください。「写真を選ぶ・撮る」でも撮影できます。"}});
+const closeCam=()=>{stream?.getTracks().forEach(t=>t.stop());stream=null;$("ov").hidden=true};
+$("camClose").onclick=closeCam;
+$("shoot").onclick=()=>{const w=vid.videoWidth,h=vid.videoHeight,tw=Math.min(w,h*4/3),th=tw*3/4;
+const c=document.createElement("canvas");c.width=tw;c.height=th;c.getContext("2d").drawImage(vid,(w-tw)/2,(h-th)/2,tw,th,0,0,tw,th);
+c.toBlob(b=>{setShot(mode,b);closeCam()},"image/jpeg",.92)};
+
+/* 写真選択後にガイドへ合わせる */
+const adj={k:null,img:null,x:0,y:0,z:1,r:0,base:1};
+function adjDraw(){const im=$("adjImg");im.style.transform=`translate(${adj.x}px,${adj.y}px) rotate(${adj.r}deg) scale(${adj.z*adj.base})`}
+function openAdjust(k,file){adj.k=k;const im=$("adjImg");const url=URL.createObjectURL(file);
+im.onload=()=>{const box=$("adj").getBoundingClientRect();adj.base=Math.max(box.width/im.naturalWidth,box.height/im.naturalHeight);
+adj.z=1;adj.r=0;$("zoom").value=1;$("rot").value=0;adj.x=(box.width-im.naturalWidth*adj.base)/2;adj.y=(box.height-im.naturalHeight*adj.base)/2;adjDraw()};
+$("guide2").innerHTML=GUIDE[k].svg;$("guideTxt2").textContent=GUIDE[k].txt;$("ov2").hidden=false;im.src=url}
+let drag=null,pts=new Map(),pinch0=null;
+$("adj").addEventListener("pointerdown",e=>{$("adj").setPointerCapture(e.pointerId);pts.set(e.pointerId,[e.clientX,e.clientY]);
+if(pts.size===1)drag={x:e.clientX-adj.x,y:e.clientY-adj.y};if(pts.size===2){const [a,b]=[...pts.values()];pinch0={d:Math.hypot(a[0]-b[0],a[1]-b[1]),z:adj.z}}});
+$("adj").addEventListener("pointermove",e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,[e.clientX,e.clientY]);
+if(pts.size===2&&pinch0){const [a,b]=[...pts.values()];adj.z=Math.min(4,Math.max(.2,pinch0.z*Math.hypot(a[0]-b[0],a[1]-b[1])/pinch0.d));$("zoom").value=adj.z}
+else if(drag){adj.x=e.clientX-drag.x;adj.y=e.clientY-drag.y}adjDraw()});
+const up=e=>{pts.delete(e.pointerId);if(pts.size<2)pinch0=null;if(pts.size===1){const [p]=[...pts.values()];drag={x:p[0]-adj.x,y:p[1]-adj.y}}if(!pts.size)drag=null};
+$("adj").addEventListener("pointerup",up);$("adj").addEventListener("pointercancel",up);
+$("zoom").oninput=e=>{adj.z=+e.target.value;adjDraw()};$("rot").oninput=e=>{adj.r=+e.target.value;adjDraw()};
+$("adjCancel").onclick=()=>{$("ov2").hidden=true};
+$("adjOk").onclick=()=>{const box=$("adj").getBoundingClientRect(),im=$("adjImg");const W2=1280,H2=960,k=W2/box.width;
+const c=document.createElement("canvas");c.width=W2;c.height=H2;const g=c.getContext("2d");g.fillStyle="#000";g.fillRect(0,0,W2,H2);
+g.setTransform(k,0,0,k,0,0);g.translate(adj.x,adj.y);g.rotate(adj.r*Math.PI/180);g.scale(adj.z*adj.base,adj.z*adj.base);g.drawImage(im,0,0);
+c.toBlob(b=>{setShot(adj.k,b);$("ov2").hidden=true},"image/jpeg",.92)};
+/* 比較・予想 */
+function base(){return logs.find(l=>l.id===baseId)||null}
+function predicted(){const b=base(),w=+$("width").value;if(!b||!w||!b.width||!b.per)return null;
+return b.per+((w-b.width)/.25)*1.0+(ANG[angle]-ANG[b.angle||"フラット"])*1.0}
+function renderCmp(){const b=base(),box=$("cmpBox");
+if(!b){box.innerHTML='<p class="note">比較の基準が未選択。下の「記録」から同じ機種の記録をタップしてください。</p>';return}
+const p=predicted(),bd=+$("border").value,w=+$("width").value;
+const dw=w&&b.width?((w-b.width)/.25):null;
+box.innerHTML=`<p class="note" style="margin-top:10px"><b>基準：</b>${b.kishu} ${b.dai}番（${b.date}）ヘソ ${b.width||"—"}mm・${b.angle||"—"}・回転率 ${b.per?b.per.toFixed(1):"—"}（${b.spin}回転）</p>
+<div class="cmp"><div><div class="note">今の台（真上）</div><img alt="" ${shot.top?`src="${shot.top}"`:""}></div><div><div class="note">基準（真上）</div><img alt="" ${b.top?`src="${b.top}"`:""}></div>
+<div><div class="note">今の台（真横）</div><img alt="" ${shot.side?`src="${shot.side}"`:""}></div><div><div class="note">基準（真横）</div><img alt="" ${b.side?`src="${b.side}"`:""}></div></div>
+<div class="res" style="margin-top:8px"><div>幅の差<b>${dw===null?"—":(dw>=0?"+":"")+dw+"枚"}</b></div><div>予想回転率<b>${p?p.toFixed(1):"—"}</b></div><div>ボーダー差<b class="${p&&p>=bd?"pos":"neg"}">${p?((p-bd>=0?"+":"")+(p-bd).toFixed(1)):"—"}</b></div></div>
+${b.spin<1500?'<p class="warn">基準の回転数が1500回未満のため、予想の信頼度は低い。</p>':""}
+<p class="note">予想回転率 ＝ 基準の回転率 ＋ 幅の差（1枚＝1回転）＋ 角度の差（1段階＝1回転）。目安です。</p>`}
+
+function upd(){
+$("inv").textContent=st.inv.toLocaleString()+"円";$("spin").textContent=st.spin;
+const per=st.inv>0?st.spin/(st.inv/1000):null;$("per").textContent=per?per.toFixed(1):"—";
+$("spinWarn").textContent=st.spin>0&&st.spin<1500?`あと${1500-st.spin}回転で1500回転。それまでは回転率のブレが大きい。`:"";
+const use=per||predicted();const bd=+$("border").value,sph=+$("sph").value,h=+$("hours").value;
+if(use&&bd>0){const d=use-bd;const hr=(use/bd-1)*1000*(sph/use);
+$("diff").textContent=(d>=0?"+":"")+d.toFixed(1);$("hourly").textContent=yen(hr);$("daily").textContent=yen(hr*h);
+[["diff",d],["hourly",hr],["daily",hr]].forEach(([k,v])=>$(k).className=v>=0?"pos":"neg")}
+else["diff","hourly","daily"].forEach(k=>{$(k).textContent="—";$(k).className=""});
+renderCmp();if(typeof work==="function")work();return per}
+function push(){st.hist.push([st.inv,st.spin]);if(st.hist.length>300)st.hist.shift()}
+$("add500").onclick=()=>{push();st.inv+=500;upd()};
+$("addSpin").onclick=()=>{push();st.spin++;upd()};
+$("add10").onclick=()=>{push();st.spin+=10;upd()};
+$("undo").onclick=()=>{const h=st.hist.pop();if(h){[st.inv,st.spin]=h;upd()}};
+$("reset").onclick=()=>{if(confirm("計測をリセットしますか？")){st={inv:0,spin:0,hist:[]};upd()}};
+$("invIn").onchange=e=>{push();st.inv=+e.target.value||0;upd()};
+$("spinIn").onchange=e=>{push();st.spin=+e.target.value||0;upd()};
+["border","rate","sph","hours","width"].forEach(k=>$(k).addEventListener("input",upd));
+
+
+function work(){const bal=$("wBal").value,R=+$("wR").value,sp=+$("wSpin").value||st.spin,pr=+$("wProb").value,out=+$("wOut").value,r=+$("rate").value;
+$("wRate").textContent=r+"円";
+if(bal===""||!R&&R!==0||!sp||!pr||!out){["wTheo","wLuck","wWork"].forEach(k=>{$(k).textContent="—";$(k).className=""});return null}
+const theo=sp/pr,luck=R-theo,w=+bal-luck*out*r;
+$("wTheo").textContent=theo.toFixed(1)+"R";$("wLuck").textContent=(luck>=0?"+":"")+luck.toFixed(1)+"R";$("wLuck").className=luck>=0?"pos":"neg";
+$("wWork").textContent=yen(w);$("wWork").className=w>=0?"pos":"neg";return Math.round(w)}
+["wBal","wR","wSpin","wProb","wOut","rate"].forEach(k=>$(k).addEventListener("input",work));
+/* 記録 */
+function store(){try{localStorage.setItem("kugi_logs2",JSON.stringify(logs))}catch(e){alert("保存できませんでした。古い記録を削除してください。")}render()}
+function render(){
+const ks=[...new Set(logs.map(l=>l.kishu))];
+$("kishuList").innerHTML=ks.map(k=>`<option value="${k}">`).join("");
+const f=$("filter"),cur=f.value;f.innerHTML='<option value="">すべて</option>'+ks.map(k=>`<option ${k===cur?"selected":""}>${k}</option>`).join("");
+const list=logs.filter(l=>!f.value||l.kishu===f.value);
+$("log").innerHTML=list.length?list.map(l=>`<div class="rec ${l.id===baseId?"sel":""}" data-id="${l.id}"><img alt="" ${l.top?`src="${l.top}"`:""}>
+<div><b>${l.kishu}</b> ${l.dai}番 <span class="note">${l.date}</span><br><span class="note">ヘソ ${l.width||"—"}mm・${l.angle}・回転率 ${l.per?l.per.toFixed(1):"—"}（${l.spin}回転）${l.spin<1500?" ⚠少":""}${l.work!=null?`<br>収支 ${yen(l.bal)}・仕事量 ${yen(l.work)}`:""}</span></div>
+<button class="btn alt" data-del="${l.id}" style="padding:6px 10px">削除</button></div>`).join(""):'<p class="note">まだ記録がありません。</p>'}
+$("filter").onchange=render;
+$("log").onclick=e=>{const d=e.target.closest("[data-del]");if(d){if(confirm("削除しますか？")){logs=logs.filter(l=>l.id!==d.dataset.del);if(baseId===d.dataset.del)baseId=null;store();upd()}return}
+const r=e.target.closest(".rec");if(r){baseId=baseId===r.dataset.id?null:r.dataset.id;render();upd();$("judgeSec").scrollIntoView({behavior:"smooth"})}};
+$("kishu").addEventListener("change",()=>{if(baseId)return;const k=$("kishu").value;const c=logs.filter(l=>l.kishu===k&&l.per&&l.width).sort((a,b)=>b.spin-a.spin)[0];if(c){baseId=c.id;$("filter").value=k;render();upd()}});
+$("save").onclick=()=>{const per=upd();
+logs.unshift({id:Date.now().toString(36),date:new Date().toLocaleDateString("ja-JP"),kishu:$("kishu").value||"-",dai:$("dai").value||"-",
+width:+$("width").value||null,angle,per,inv:st.inv,spin:st.spin,top:shot.top,side:shot.side,bal:$("wBal").value===""?null:+$("wBal").value,rounds:+$("wR").value||null,work:work()});store()};
+$("csv").onclick=()=>{const rows=logs.map(l=>[l.date,l.kishu,l.dai,l.width||"",l.angle,l.per?l.per.toFixed(2):"",l.inv,l.spin,l.bal??"",l.rounds??"",l.work??""].join(","));
+navigator.clipboard.writeText(["日付,機種,台,ヘソ幅mm,角度,回転率,投資,回転,実収支,総R数,仕事量",...rows].join("\n")).then(()=>alert("コピーしました"),()=>alert("コピーできませんでした"))};
+render();upd();
+
+/* 写真判定（Anthropic API） */
+(()=>{
+const K="kugi_api";let cfg={key:"",model:"claude-sonnet-5"};try{Object.assign(cfg,JSON.parse(localStorage.getItem(K)||"{}"))}catch(e){}
+$("apiKey").value=cfg.key;$("apiModel").value=cfg.model;
+const refresh=()=>{$("judge").disabled=!cfg.key;if(!cfg.key)$("aiOut").textContent="写真判定を使うには、下の「写真判定の設定」でAPIキーを入力してください。ヘソ幅と角度は手で入力できます。"};
+$("apiSave").onclick=()=>{cfg.key=$("apiKey").value.trim();cfg.model=$("apiModel").value.trim()||"claude-sonnet-5";try{localStorage.setItem(K,JSON.stringify(cfg))}catch(e){}$("apiMsg").textContent=cfg.key?"保存しました。":"キーを削除しました。";$("aiOut").textContent="";refresh()};
+refresh();
+let ctl;$("stop").onclick=()=>ctl?.abort();
+const img=d=>({type:"image",source:{type:"base64",media_type:"image/jpeg",data:d.split(",")[1]}});
+$("judge").onclick=async()=>{
+if(!shot.top&&!shot.side){$("aiOut").textContent="真上か真横の写真を撮ってください。";return}
+const b=base();const content=[],desc=[];
+if(shot.top){content.push(img(shot.top));desc.push(`${content.length}枚目：評価する台のヘソ釘を真上から撮影`)}
+if(shot.side){content.push(img(shot.side));desc.push(`${content.length}枚目：評価する台のヘソ釘を真横から撮影`)}
+if(b?.top&&b.width){content.push(img(b.top));desc.push(`${content.length}枚目：比較用。同機種で過去に測ったヘソ（幅${b.width}mm、真上）`)}
+const prompt=`あなたはパチンコの釘読みの専門家です。
+${desc.join("\n")}
+機種名：${$("kishu").value||"不明"}
+前提：パチンコ玉の直径は11mm。ヘソ幅は0.25mm刻み（板ゲージ1枚）で11.25〜14.00mmの範囲で調整される。
+1) 真上の写真からヘソ幅（2本のヘソ釘の間の距離）を0.25mm刻みで推定。${b?.top?"比較用写真との差（何枚分広い／狭い）を優先して推定。":"写真内に玉があれば直径11mmを尺度に使う。"}
+2) 真横の写真から、ヘソ釘が板に対して上げ・フラット・下げのどれかを判定し、角度を推定。釘の根元を見ること。
+写真がない・判別できない項目はnullとし、confidenceをlowにする。
+JSONのみで出力（前置き・コードブロック禁止）:
+{"width_mm":12.25,"width_confidence":"high|mid|low","angle":"上げ|フラット|下げ","angle_deg":0,"angle_confidence":"high|mid|low","notes":"根拠を日本語で簡潔に","photo_advice":"撮り直しが必要ならその指示、不要なら空文字"}`;
+content.push({type:"text",text:prompt});
+ctl=new AbortController();$("judge").disabled=true;$("stop").hidden=false;$("aiOut").textContent="判定中…";
+try{const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",signal:ctl.signal,
+headers:{"content-type":"application/json","x-api-key":cfg.key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+body:JSON.stringify({model:cfg.model,max_tokens:1000,messages:[{role:"user",content}]})});
+const data=await res.json();
+if(!res.ok)throw{code:res.status,msg:data?.error?.message};
+const txt=(data.content||[]).map(c=>c.text||"").join("").replace(/```json|```/g,"").trim();
+const r=JSON.parse(txt.slice(txt.indexOf("{"),txt.lastIndexOf("}")+1));
+let msg=[];
+if(typeof r.width_mm==="number"){const w=(Math.round(r.width_mm*4)/4).toFixed(2);if(W.includes(w)){$("width").value=w;msg.push(`ヘソ幅 ${w}mm（確度 ${r.width_confidence||"-"}）`)}}
+if(["上げ","フラット","下げ"].includes(r.angle)){setAngle(r.angle);msg.push(`角度 ${r.angle}${r.angle_deg!=null?`（約${r.angle_deg}度）`:""}（確度 ${r.angle_confidence||"-"}）`)}
+upd();
+$("aiOut").textContent=(msg.join("\n")||"判定できませんでした。")+(r.notes?"\n"+r.notes:"")+(r.photo_advice?"\n撮影："+r.photo_advice:"")+"\n※結果は下の欄に反映済み。手で修正できます。";
+}catch(e){let m;if(e.name==="AbortError")m="停止しました。";else if(e.code===401)m="APIキーが正しくありません。";else if(e.code===429||e.code===529)m="混雑中です。少し待ってから押してください。";else if(e.code===404)m="モデル名が正しくありません。設定を確認してください。";else if(e.code)m=`判定に失敗しました（${e.code}：${e.msg||""}）。`;else if(e instanceof SyntaxError)m="結果を読み取れませんでした。もう一度押してください。";else m="通信に失敗しました。電波を確認してください。";$("aiOut").textContent=m}
+finally{$("judge").disabled=!cfg.key;$("stop").hidden=true}};
+})();
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script></body></html>
