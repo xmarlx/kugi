@@ -164,13 +164,19 @@ details summary{cursor:pointer;font-weight:700}
 <div class="grid2">
 <div><label for="sph">1時間の回転数</label><input id="sph" type="number" value="200"></div>
 <div><label for="hours">稼働時間（h）</label><input id="hours" type="number" step="0.5" value="8"></div>
+<div><label for="mochi">持ち玉比率（%）</label><input id="mochi" type="number" min="0" max="100" step="5" value="0"></div>
+<div><label for="kezuri">出玉削り（%）</label><input id="kezuri" type="number" min="0" max="50" step="1" value="0"></div>
 </div>
 <div class="res" style="margin-top:10px">
+<div style="grid-column:1/-1">実質ボーダー<b id="realB">—</b></div>
 <div>ボーダー差<b id="diff">—</b></div>
 <div>時給<b id="hourly">—</b></div>
 <div>日当<b id="daily">—</b></div>
 </div>
-<p class="note">実測の回転率で計算。実測がない場合は、過去記録からの予想回転率で計算。1000円あたり期待値 ≒ (回転率 ÷ ボーダー − 1) × 1000円。持ち玉比率・出玉削りは未考慮。</p>
+<p class="note">実測の回転率で計算。実測がない場合は、過去記録からの予想回転率で計算。<br>
+持ち玉比率：打った回転のうち持ち玉で回した割合。等価以外では、持ち玉で打つほど実質ボーダーが下がる。<br>
+出玉削り：大当り出玉が表記より少ない割合（例：1500個表記で実際1425個なら5%）。<br>
+計算：1回転あたりの出玉価値 ＝ 1000 ÷ ボーダー ×（1 − 削り）。現金時の1回転コスト ＝ 1000 ÷ 回転率、持ち玉時 ＝ 250 ÷ 回転率 × 換金率。これを持ち玉比率で合算。ボーダーは現金投資の値を入れてください。</p>
 </section>
 
 <section class="sec">
@@ -298,10 +304,14 @@ $("inv").textContent=st.inv.toLocaleString()+"円";$("spin").textContent=st.spin
 const per=st.inv>0?st.spin/(st.inv/1000):null;$("per").textContent=per?per.toFixed(1):"—";
 $("spinWarn").textContent=st.spin>0&&st.spin<1500?`あと${1500-st.spin}回転で1500回転。それまでは回転率のブレが大きい。`:"";
 const use=per||predicted();const bd=+$("border").value,sph=+$("sph").value,h=+$("hours").value;
-if(use&&bd>0){const d=use-bd;const hr=(use/bd-1)*1000*(sph/use);
+const x=+$("rate").value,p=Math.min(100,Math.max(0,+$("mochi").value||0))/100,k=Math.min(50,Math.max(0,+$("kezuri").value||0))/100;
+if(use&&bd>0){const g=1000/(bd*x)*(1-k);
+const evSpin=p*(g*x-250/use*x)+(1-p)*(g*x-1000/use);
+const real=(250*p*x+1000*(1-p))/(g*x);$("realB").textContent=real.toFixed(1);
+const d=use-real;const hr=evSpin*sph;
 $("diff").textContent=(d>=0?"+":"")+d.toFixed(1);$("hourly").textContent=yen(hr);$("daily").textContent=yen(hr*h);
 [["diff",d],["hourly",hr],["daily",hr]].forEach(([k,v])=>$(k).className=v>=0?"pos":"neg")}
-else["diff","hourly","daily"].forEach(k=>{$(k).textContent="—";$(k).className=""});
+else{["diff","hourly","daily"].forEach(k=>{$(k).textContent="—";$(k).className=""});$("realB").textContent="—"}
 renderCmp();if(typeof work==="function")work();return per}
 function push(){st.hist.push([st.inv,st.spin]);if(st.hist.length>300)st.hist.shift()}
 $("add500").onclick=()=>{push();st.inv+=500;upd()};
@@ -311,7 +321,7 @@ $("undo").onclick=()=>{const h=st.hist.pop();if(h){[st.inv,st.spin]=h;upd()}};
 $("reset").onclick=()=>{if(confirm("計測をリセットしますか？")){st={inv:0,spin:0,hist:[]};upd()}};
 $("invIn").onchange=e=>{push();st.inv=+e.target.value||0;upd()};
 $("spinIn").onchange=e=>{push();st.spin=+e.target.value||0;upd()};
-["border","rate","sph","hours","width"].forEach(k=>$(k).addEventListener("input",upd));
+["border","rate","sph","hours","width","mochi","kezuri"].forEach(k=>$(k).addEventListener("input",upd));
 
 
 function work(){const bal=$("wBal").value,R=+$("wR").value,sp=+$("wSpin").value||st.spin,pr=+$("wProb").value,out=+$("wOut").value,r=+$("rate").value;
