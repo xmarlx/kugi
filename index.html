@@ -75,10 +75,10 @@ details summary{cursor:pointer;font-weight:700}
 <section class="sec">
 <h2>ヘソを撮影</h2>
 <div class="shots">
-<div class="slot"><img id="imgTop" alt="真上の写真"><b>真上</b><div class="note">ヘソ幅を見る</div>
+<div class="slot"><img id="imgTop" alt="真上の写真"><b>真上（正面）</b><div class="note">ヘソ幅と角度を見る</div>
 <div class="row" style="margin-top:6px"><button class="btn" data-cam="top">カメラ</button></div>
 <label class="note" style="display:block;margin-top:6px">写真を選ぶ・撮る（撮影後にガイドで位置合わせ）<input type="file" accept="image/*" data-file="top"></label></div>
-<div class="slot"><img id="imgSide" alt="真横の写真"><b>真横</b><div class="note">上げ／下げを見る</div>
+<div class="slot"><img id="imgSide" alt="真横の写真"><b>真横（任意）</b><div class="note">撮れる場合だけ。角度の精度が上がる</div>
 <div class="row" style="margin-top:6px"><button class="btn" data-cam="side">カメラ</button></div>
 <label class="note" style="display:block;margin-top:6px">写真を選ぶ・撮る（撮影後にガイドで位置合わせ）<input type="file" accept="image/*" data-file="side"></label></div>
 </div>
@@ -90,13 +90,13 @@ details summary{cursor:pointer;font-weight:700}
 <circle cx="105" cy="112" r="16" fill="#8a7440"/><circle cx="195" cy="112" r="16" fill="#8a7440"/>
 <circle cx="150" cy="105" r="30" fill="none" stroke="#6b7780" stroke-dasharray="4 3"/><text x="150" y="60" font-size="11" text-anchor="middle" fill="#1d2a33">玉(11mm)が通るすき間＝ヘソ幅</text>
 <line x1="121" y1="135" x2="179" y2="135" stroke="#b3362f" stroke-width="2"/></svg>
-<p class="note"><b>真横</b>：ガラスに沿ってスマホを横から当て、ヘソ釘を真横から見る。盤面の板と釘の根元がはっきり写るようにし、板の面をガイドの縦線に合わせる。</p>
+<p class="note"><b>真横（任意）</b>：台の横からガラスに沿って覗き込める場合だけ撮る。ガラスに沿ってスマホを横から当て、ヘソ釘を真横から見る。盤面の板と釘の根元がはっきり写るようにし、板の面をガイドの縦線に合わせる。</p>
 <svg class="smp" viewBox="0 0 300 225" role="img" aria-label="真横からの撮影見本"><rect width="300" height="225" fill="#dfe6ea"/>
 <rect x="40" y="20" width="22" height="185" fill="#b9a680"/><text x="51" y="215" font-size="11" text-anchor="middle" fill="#1d2a33">盤面の板</text>
 <line x1="62" y1="70" x2="220" y2="58" stroke="#1f7a4d" stroke-width="5"/><text x="235" y="58" font-size="11" fill="#1f7a4d">上げ</text>
 <line x1="62" y1="112" x2="220" y2="112" stroke="#1d2a33" stroke-width="5"/><text x="235" y="116" font-size="11" fill="#1d2a33">フラット</text>
 <line x1="62" y1="155" x2="220" y2="168" stroke="#b3362f" stroke-width="5"/><text x="235" y="172" font-size="11" fill="#b3362f">下げ</text></svg>
-<p class="note">上げ＝最もプラス、フラット＝プラス、下げ＝マイナス。釘の根元（板に刺さっている部分）を見ると判断しやすい。</p>
+<p class="note">真横が撮れない場合は、真上（正面）の写真で、釘の頭が根元より上にずれていれば上げ、下にずれていれば下げと判断する。精度は真横より下がる。<br>上げ＝最もプラス、フラット＝プラス、下げ＝マイナス。釘の根元（板に刺さっている部分）を見ると判断しやすい。</p>
 </details>
 </section>
 
@@ -113,9 +113,9 @@ details summary{cursor:pointer;font-weight:700}
 </details>
 <div class="grid2">
 <div><label for="width">ヘソ幅（mm）</label><select id="width"></select></div>
-<div><label>ヘソ釘の角度</label><div class="seg" id="angle"><button data-v="上げ">上げ</button><button data-v="フラット" class="on">フラット</button><button data-v="下げ">下げ</button></div></div>
+<div><label>ヘソ釘の角度</label><div class="seg" id="angle" style="grid-template-columns:repeat(4,1fr)"><button data-v="上げ">上げ</button><button data-v="フラット">フラット</button><button data-v="下げ">下げ</button><button data-v="不明" class="on">不明</button></div></div>
 </div>
-<p class="note">0.25mm＝板1枚。1枚開くと回転率は約1回転上がる（機種により0.8〜1.2回転）。</p>
+<p class="note">角度が分からない場合は「不明」のまま。予想回転率では角度の差を0として計算します。<br>0.25mm＝板1枚。1枚開くと回転率は約1回転上がる（機種により0.8〜1.2回転）。</p>
 <div id="cmpBox"></div>
 </section>
 
@@ -200,10 +200,10 @@ details summary{cursor:pointer;font-weight:700}
 const $=id=>document.getElementById(id);
 const W=[];for(let w=11.25;w<=14.001;w+=.25)W.push(w.toFixed(2));
 $("width").innerHTML='<option value="">未入力</option>'+W.map(w=>`<option>${w}</option>`).join("");
-let angle="フラット";
+let angle="不明";
 $("angle").onclick=e=>{const b=e.target.closest("button");if(!b)return;setAngle(b.dataset.v)};
 function setAngle(v){angle=v;$("angle").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.v===v));upd()}
-const ANG={"上げ":1,"フラット":0,"下げ":-1};
+const ANG={"上げ":1,"フラット":0,"下げ":-1,"不明":null};
 let shot={top:null,side:null};
 let st={inv:0,spin:0,hist:[]};
 let logs=[];try{logs=JSON.parse(localStorage.getItem("kugi_logs2")||"[]")}catch(e){}
@@ -264,7 +264,7 @@ c.toBlob(b=>{setShot(adj.k,b);$("ov2").hidden=true},"image/jpeg",.92)};
 /* 比較・予想 */
 function base(){return logs.find(l=>l.id===baseId)||null}
 function predicted(){const b=base(),w=+$("width").value;if(!b||!w||!b.width||!b.per)return null;
-return b.per+((w-b.width)/.25)*1.0+(ANG[angle]-ANG[b.angle||"フラット"])*1.0}
+return b.per+((w-b.width)/.25)*1.0+((ANG[angle]==null||ANG[b.angle]==null)?0:(ANG[angle]-ANG[b.angle])*1.0)}
 function renderCmp(){const b=base(),box=$("cmpBox");
 if(!b){box.innerHTML='<p class="note">比較の基準が未選択。下の「記録」から同じ機種の記録をタップしてください。</p>';return}
 const p=predicted(),bd=+$("border").value,w=+$("width").value;
@@ -335,7 +335,7 @@ refresh();
 let ctl;$("stop").onclick=()=>ctl?.abort();
 const img=d=>({type:"image",source:{type:"base64",media_type:"image/jpeg",data:d.split(",")[1]}});
 $("judge").onclick=async()=>{
-if(!shot.top&&!shot.side){$("aiOut").textContent="真上か真横の写真を撮ってください。";return}
+if(!shot.top){$("aiOut").textContent="真上（正面）の写真を撮ってください。";return}
 const b=base();const content=[],desc=[];
 if(shot.top){content.push(img(shot.top));desc.push(`${content.length}枚目：評価する台のヘソ釘を真上から撮影`)}
 if(shot.side){content.push(img(shot.side));desc.push(`${content.length}枚目：評価する台のヘソ釘を真横から撮影`)}
@@ -345,10 +345,10 @@ ${desc.join("\n")}
 機種名：${$("kishu").value||"不明"}
 前提：パチンコ玉の直径は11mm。ヘソ幅は0.25mm刻み（板ゲージ1枚）で11.25〜14.00mmの範囲で調整される。
 1) 真上の写真からヘソ幅（2本のヘソ釘の間の距離）を0.25mm刻みで推定。${b?.top?"比較用写真との差（何枚分広い／狭い）を優先して推定。":"写真内に玉があれば直径11mmを尺度に使う。"}
-2) 真横の写真から、ヘソ釘が板に対して上げ・フラット・下げのどれかを判定し、角度を推定。釘の根元を見ること。
+2) ヘソ釘が板に対して上げ・フラット・下げのどれかを判定し、角度を推定。真横の写真があればそれを優先し、釘の根元を見る。真横の写真がない場合は真上（正面）の写真で、釘の頭と根元の位置のずれ（上げなら頭が根元より上）や影の向きから判定し、angle_confidenceは原則lowかmidにする。判別できなければangleは"不明"。
 写真がない・判別できない項目はnullとし、confidenceをlowにする。
 JSONのみで出力（前置き・コードブロック禁止）:
-{"width_mm":12.25,"width_confidence":"high|mid|low","angle":"上げ|フラット|下げ","angle_deg":0,"angle_confidence":"high|mid|low","notes":"根拠を日本語で簡潔に","photo_advice":"撮り直しが必要ならその指示、不要なら空文字"}`;
+{"width_mm":12.25,"width_confidence":"high|mid|low","angle":"上げ|フラット|下げ|不明","angle_deg":0,"angle_confidence":"high|mid|low","notes":"根拠を日本語で簡潔に","photo_advice":"撮り直しが必要ならその指示、不要なら空文字"}`;
 content.push({type:"text",text:prompt});
 ctl=new AbortController();$("judge").disabled=true;$("stop").hidden=false;$("aiOut").textContent="判定中…";
 try{const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",signal:ctl.signal,
@@ -360,7 +360,7 @@ const txt=(data.content||[]).map(c=>c.text||"").join("").replace(/```json|```/g,
 const r=JSON.parse(txt.slice(txt.indexOf("{"),txt.lastIndexOf("}")+1));
 let msg=[];
 if(typeof r.width_mm==="number"){const w=(Math.round(r.width_mm*4)/4).toFixed(2);if(W.includes(w)){$("width").value=w;msg.push(`ヘソ幅 ${w}mm（確度 ${r.width_confidence||"-"}）`)}}
-if(["上げ","フラット","下げ"].includes(r.angle)){setAngle(r.angle);msg.push(`角度 ${r.angle}${r.angle_deg!=null?`（約${r.angle_deg}度）`:""}（確度 ${r.angle_confidence||"-"}）`)}
+if(["上げ","フラット","下げ","不明"].includes(r.angle)){setAngle(r.angle);msg.push(`角度 ${r.angle}${r.angle_deg!=null?`（約${r.angle_deg}度）`:""}（確度 ${r.angle_confidence||"-"}）`)}
 upd();
 $("aiOut").textContent=(msg.join("\n")||"判定できませんでした。")+(r.notes?"\n"+r.notes:"")+(r.photo_advice?"\n撮影："+r.photo_advice:"")+"\n※結果は下の欄に反映済み。手で修正できます。";
 }catch(e){let m;if(e.name==="AbortError")m="停止しました。";else if(e.code===401)m="APIキーが正しくありません。";else if(e.code===429||e.code===529)m="混雑中です。少し待ってから押してください。";else if(e.code===404)m="モデル名が正しくありません。設定を確認してください。";else if(e.code)m=`判定に失敗しました（${e.code}：${e.msg||""}）。`;else if(e instanceof SyntaxError)m="結果を読み取れませんでした。もう一度押してください。";else m="通信に失敗しました。電波を確認してください。";$("aiOut").textContent=m}
