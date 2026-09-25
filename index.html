@@ -37,6 +37,10 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .res div{background:var(--bg);border-radius:8px;padding:8px;font-size:.85rem}
 .res b{display:block;font-size:1.25rem}
 .pos{color:var(--plus)}.neg{color:var(--minus)}
+.mres{max-height:260px;overflow-y:auto;border-radius:8px;margin-top:4px}
+.mres:empty{display:none}
+.mres button{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;font:inherit;padding:12px 10px;border:none;border-bottom:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.mres button span{color:var(--sub);font-size:.8rem;white-space:nowrap}
 .note{font-size:.8rem;color:var(--sub)}
 .warn{font-size:.85rem;color:var(--minus)}
 .shots{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -65,6 +69,8 @@ details summary{cursor:pointer;font-weight:700}
 <section class="sec">
 <h2>台情報</h2>
 <div class="grid2">
+<div style="grid-column:1/-1"><label for="mSearch">機種を検索</label><input id="mSearch" type="search" placeholder="例：沖海、エヴァ、えう゛ぁ、ガロ" autocomplete="off">
+<div id="mResult" class="mres" role="listbox"></div></div>
 <div><label for="kishu">機種名</label><input id="kishu" list="kishuList"><datalist id="kishuList"></datalist></div>
 <div><label for="dai">台番号</label><input id="dai" inputmode="numeric"></div>
 <div><label for="border">ボーダー（回/1000円）</label><input id="border" type="number" step="0.1" value="18"></div>
@@ -337,6 +343,19 @@ $("mAdd").onclick=()=>{const n=$("mName").value.trim(),v=["mB1","mB2","mB3","mB4
 if(!n||!v[0]){$("mMsg").textContent="機種名と等価ボーダーは必須です。";return}
 custom=custom.filter(r=>r[0]!==n);custom.push([n,...v]);try{localStorage.setItem("kugi_machines",JSON.stringify(custom))}catch(e){}
 ["mName","mB1","mB2","mB3","mB4"].forEach(k=>$(k).value="");$("mMsg").textContent="登録しました。";renderMaster()};
+/* 機種検索 */
+function norm(t){let s=(t||"").normalize("NFKC").toLowerCase().replace(/[\s・\-ー～~〜.。:：!！]/g,"").normalize("NFC");s=s.replace(/[\u30a1-\u30f6]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60));return s.replace(/\u3094\u3041/g,"ば").replace(/\u3094/g,"ぶ")}
+const ALIAS={"がろ":"牙狼","ほくと":"北斗","えば":"エヴァ","えゔぁ":"エヴァ","うみ":"海","おきうみ":"沖海","だいかい":"大海","けいじ":"慶次","りぜろ":"リゼロ","とうりべ":"東リベ","しんふぉ":"シンフォ","げんさん":"源さん","ばき":"刃牙","かいじ":"カイジ"};
+function searchMachines(q){const n=norm(q);if(!n)return[];
+const keys=[n];for(const[k,v]of Object.entries(ALIAS))if(k.startsWith(n)||n.startsWith(k))keys.push(norm(v));
+const names=[...new Set([...master().keys(),...logs.map(l=>l.kishu).filter(k=>k&&k!=="-")])];
+return names.map(name=>{const nn=norm(name);let sc=-1;for(const k of keys){const i=nn.indexOf(k);if(i>=0)sc=Math.max(sc,100-i-(nn.length-k.length)*.1)}return[name,sc]}).filter(x=>x[1]>=0).sort((a,b)=>b[1]-a[1]).slice(0,30).map(x=>x[0])}
+function renderSearch(){const q=$("mSearch").value,box=$("mResult");if(!q.trim()){box.innerHTML="";return}
+const res=searchMachines(q),m=master(),ri=RIDX[$("rate").value];
+box.innerHTML=res.length?res.map(n=>{const r=m.get(n);const cnt=logs.filter(l=>l.kishu===n).length;
+return `<button type="button" data-name="${n.replace(/"/g,"&quot;")}"><b>${n}</b><span>${r&&r[ri]?"ボーダー "+r[ri]:""}${cnt?` 記録${cnt}件`:""}</span></button>`}).join(""):'<p class="note" style="padding:8px">見つかりません。「機種の登録」から追加できます。</p>'}
+$("mSearch").addEventListener("input",renderSearch);
+$("mResult").onclick=e=>{const b=e.target.closest("button[data-name]");if(!b)return;$("kishu").value=b.dataset.name;$("kishu").dispatchEvent(new Event("change"));$("mSearch").value="";$("mResult").innerHTML="";$("kishu").blur()};
 /* 記録 */
 function store(){try{localStorage.setItem("kugi_logs2",JSON.stringify(logs))}catch(e){alert("保存できませんでした。古い記録を削除してください。")}render()}
 function render(){
