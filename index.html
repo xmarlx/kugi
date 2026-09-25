@@ -41,6 +41,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .mres:empty{display:none}
 .mres button{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;font:inherit;padding:12px 10px;border:none;border-bottom:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
 .mres button span{color:var(--sub);font-size:.8rem;white-space:nowrap}
+#yoriQ .q{margin-top:10px}#yoriQ .seg{grid-template-columns:repeat(4,1fr)}#yoriQ .seg button{font-size:.8rem;padding:10px 2px}
 .note{font-size:.8rem;color:var(--sub)}
 .warn{font-size:.85rem;color:var(--minus)}
 .shots{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -117,6 +118,20 @@ details summary{cursor:pointer;font-weight:700}
 </details>
 </section>
 
+<section class="sec" id="yoriSec">
+<h2>風車上（寄り釘）判定</h2>
+<p class="note">風車のすぐ上の寄り釘で、玉が風車の右（ヘソ側）へ流れる調整かを見る。左の釘が右下、右の釘が右上を向くのがプラス調整。</p>
+<div class="slot" style="max-width:320px"><img id="imgYori" alt="風車上の写真"><b>風車上の写真（任意）</b>
+<div class="row" style="margin-top:6px"><button class="btn" data-cam="yori">カメラ</button></div>
+<label class="note" style="display:block;margin-top:6px">写真を選ぶ・撮る<input type="file" accept="image/*" data-file="yori"></label></div>
+<div class="row" style="margin-top:8px"><button class="btn alt" id="yoriAI">写真から判定</button></div>
+<p class="note" id="yoriOut" style="white-space:pre-wrap"></p>
+<div id="yoriQ"></div>
+<div class="res" style="margin-top:10px"><div>寄りスコア<b id="yoriScore">—</b></div><div>判定<b id="yoriJudge">—</b></div></div>
+<p class="note">判定：合計+2以上＝プラス調整、−1〜+1＝無調整付近、−2以下＝マイナス調整。不明の項目は計算に入れない。<br>
+注意：寄り釘だけでは決まらない。同じ形でも風車の位置によってプラスにもマイナスにもなる。ヘソが開いているのに回らない台は、寄り・風車・こぼしのマイナス調整が原因のことが多い。最終的には回転率の実測で確認する。<br>
+出典：P-Summa「パチンコの『釘読み』の仕方」、パチンコ必勝教室「釘読み、風車、より(風車上)について」、まつたけ「釘読みクイズ Pとある-風車上」</p>
+</section>
 <section class="sec" id="judgeSec">
 <h2>ヘソ判定</h2>
 <div class="row"><button class="btn" id="judge">写真から判定</button><button class="btn alt" id="stop" hidden>停止</button></div>
@@ -231,7 +246,7 @@ let angle="不明";
 $("angle").onclick=e=>{const b=e.target.closest("button");if(!b)return;setAngle(b.dataset.v)};
 function setAngle(v){angle=v;$("angle").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.v===v));upd()}
 const ANG={"上げ":1,"フラット":0,"下げ":-1,"不明":null};
-let shot={top:null,side:null};
+let shot={top:null,side:null,yori:null};
 let st={inv:0,spin:0,mochi:0,hist:[]};
 let logs=[];try{logs=JSON.parse(localStorage.getItem("kugi_logs2")||"[]")}catch(e){}
 let baseId=null;
@@ -240,7 +255,7 @@ function yen(x){return (x>=0?"+":"")+Math.round(x).toLocaleString()+"円"}
 /* 画像縮小 */
 function toThumb(blob,max=640){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height));
 const c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.8))};im.onerror=rej;im.src=URL.createObjectURL(blob)})}
-async function setShot(k,blob){shot[k]=await toThumb(blob);$(k==="top"?"imgTop":"imgSide").src=shot[k];upd()}
+async function setShot(k,blob){shot[k]=await toThumb(blob);$({top:"imgTop",side:"imgSide",yori:"imgYori"}[k]).src=shot[k];upd()}
 document.querySelectorAll("[data-file]").forEach(i=>i.onchange=()=>{if(i.files[0])openAdjust(i.dataset.file,i.files[0]);i.value=""});
 
 /* ガイド付きカメラ */
@@ -249,6 +264,9 @@ top:{svg:`<line class="g" x1="133" y1="0" x2="133" y2="300"/><line class="g" x1=
 <line class="d" x1="200" y1="0" x2="200" y2="300"/><circle cx="120" cy="140" r="34"/><circle cx="280" cy="140" r="34"/>
 <rect x="110" y="200" width="180" height="60" rx="6"/><text x="200" y="236">入賞口</text><text x="120" y="92">ヘソ釘</text><text x="280" y="92">ヘソ釘</text>`,
 txt:"真上から。ヘソ釘2本の頭を丸に、すき間の中心を点線に合わせる。手ブレしないよう両手で持つ。"},
+yori:{svg:`<line class="d" x1="200" y1="0" x2="200" y2="300"/><circle cx="200" cy="215" r="45"/><text x="200" y="285">風車</text>
+<circle cx="150" cy="120" r="14"/><circle cx="250" cy="120" r="14"/><text x="120" y="95">左の寄り</text><text x="280" y="95">右の寄り</text>
+<line class="g" x1="0" y1="120" x2="400" y2="120"/>`,txt:"正面から。風車を下の丸に、風車の左上・右上の寄り釘を小さい丸に合わせる。"},
 side:{svg:`<line x1="70" y1="0" x2="70" y2="300"/><text x="70" y="290">板の面</text>
 <line class="d" x1="70" y1="150" x2="380" y2="150"/><text x="300" y="140">水平（フラット）</text>
 <line class="g" x1="70" y1="150" x2="380" y2="110"/><line class="g" x1="70" y1="150" x2="380" y2="190"/>
@@ -373,6 +391,34 @@ box.innerHTML=res.length?res.map(n=>{const r=m.get(n);const cnt=logs.filter(l=>l
 return `<button type="button" data-name="${n.replace(/"/g,"&quot;")}"><b>${n}</b><span>${r&&r[ri]?"ボーダー "+r[ri]:""}${cnt?` 記録${cnt}件`:""}</span></button>`}).join(""):'<p class="note" style="padding:8px">見つかりません。「機種の登録」から追加できます。</p>'}
 $("mSearch").addEventListener("input",renderSearch);
 $("mResult").onclick=e=>{const b=e.target.closest("button[data-name]");if(!b)return;$("kishu").value=b.dataset.name;$("kishu").dispatchEvent(new Event("change"));$("mSearch").value="";$("mResult").innerHTML="";$("kishu").blur()};
+/* 風車上判定 */
+const YQ=[["l","左の寄り釘（風車の左上）の向き",[["右下向き",1],["真下（無調整）",0],["左向き",-1],["不明",null]]],
+["r","右の寄り釘（風車の右上）の向き",[["右上向き",1],["無調整",0],["左向き・下向き",-1],["不明",null]]],
+["h","左右2本の釘頭の高さ",[["左が低い",1],["水平",0],["左が高い",-1],["不明",null]]],
+["v","縦ライン：下から4本目の釘から真下に線を引いたとき、一番下の釘は",[["線より右",1],["線上",0],["線より左",-1],["不明",null]]]];let yori={};
+function renderYori(){$("yoriQ").innerHTML=YQ.map(([k,t,op])=>`<div class="q"><label>${t}</label><div class="seg" data-k="${k}">${op.map(([l,v])=>`<button type="button" data-v="${v}" class="${(yori[k]===undefined?null:yori[k])===v?"on":""}">${l}</button>`).join("")}</div></div>`).join("");
+const vals=YQ.map(q=>yori[q[0]]).filter(v=>typeof v==="number");
+if(!vals.length){$("yoriScore").textContent="—";$("yoriJudge").textContent="—";$("yoriJudge").className="";return null}
+const sc=vals.reduce((a,b)=>a+b,0);$("yoriScore").textContent=(sc>0?"+":"")+sc;
+const j=sc>=2?"プラス":sc<=-2?"マイナス":"無調整付近";$("yoriJudge").textContent=j;$("yoriJudge").className=sc>=2?"pos":sc<=-2?"neg":"";return {score:sc,judge:j}}
+$("yoriQ").onclick=e=>{const b=e.target.closest("button");if(!b)return;const k=b.parentNode.dataset.k,v=b.dataset.v==="null"?null:+b.dataset.v;yori[k]=v;renderYori()};
+renderYori();
+$("yoriAI").onclick=async()=>{if(!shot.yori){$("yoriOut").textContent="風車上の写真を撮ってください。";return}
+if(!window.aiJSON){$("yoriOut").textContent="写真判定が使えない状態です。手で選んでください。";return}
+$("yoriAI").disabled=true;$("yoriOut").textContent="判定中…";
+const prompt=`あなたはパチンコの釘読みの専門家です。画像は、パチンコ台の風車とその上の寄り釘（鎧釘）を正面から撮影したものです。機種名：${$("kishu").value||"不明"}
+次の4項目を判定してください。判別できない項目はnull。
+l: 風車の左上の寄り釘の向き。右下向き=1、真下（無調整）=0、左向き=-1
+r: 風車の右上の寄り釘の向き。右上向き=1、無調整=0、左向き・下向き=-1
+h: 左右2本の寄り釘の釘頭の高さ。左が低い=1、水平=0、左が高い=-1
+v: 左側の釘列で、下から4本目の釘から真下に引いた線に対し、一番下の釘が右=1、線上=0、左=-1
+玉が風車の右（ヘソ側）へ流れやすいかという観点で、風車の位置も考慮してコメントすること。
+JSONのみで出力（前置き・コードブロック禁止）:{"l":1,"r":0,"h":0,"v":null,"confidence":"high|mid|low","notes":"根拠を日本語で簡潔に","photo_advice":"撮り直しの指示または空文字"}`;
+try{const r=await window.aiJSON([shot.yori],prompt);
+YQ.forEach(([k])=>{const v=r[k];yori[k]=[1,0,-1].includes(v)?v:null});const res=renderYori();
+$("yoriOut").textContent=`確度 ${r.confidence||"-"}${res?"・判定 "+res.judge:""}\n${r.notes||""}${r.photo_advice?"\n撮影："+r.photo_advice:""}\n※結果は下の選択に反映済み。手で修正できます。`}
+catch(e){$("yoriOut").textContent="判定に失敗しました（"+(e.code||e.message||"error")+"）。"}
+finally{$("yoriAI").disabled=false}};
 /* 記録 */
 function store(){try{localStorage.setItem("kugi_logs2",JSON.stringify(logs))}catch(e){alert("保存できませんでした。古い記録を削除してください。")}render()}
 function render(){
@@ -381,7 +427,7 @@ $("kishuList").innerHTML=[...new Set([...master().keys(),...ks])].map(k=>`<optio
 const f=$("filter"),cur=f.value;f.innerHTML='<option value="">すべて</option>'+ks.map(k=>`<option ${k===cur?"selected":""}>${k}</option>`).join("");
 const list=logs.filter(l=>!f.value||l.kishu===f.value);
 $("log").innerHTML=list.length?list.map(l=>`<div class="rec ${l.id===baseId?"sel":""}" data-id="${l.id}"><img alt="" ${l.top?`src="${l.top}"`:""}>
-<div><b>${l.kishu}</b> ${l.dai}番 <span class="note">${l.date}</span><br><span class="note">ヘソ ${l.width||"—"}mm・${l.angle}・回転率 ${l.per?l.per.toFixed(1):"—"}（${l.spin}回転）${l.spin<1500?" ⚠少":""}${l.work!=null?`<br>収支 ${yen(l.bal)}・仕事量 ${yen(l.work)}`:""}</span></div>
+<div><b>${l.kishu}</b> ${l.dai}番 <span class="note">${l.date}</span><br><span class="note">ヘソ ${l.width||"—"}mm・${l.angle}・回転率 ${l.per?l.per.toFixed(1):"—"}（${l.spin}回転）${l.spin<1500?" ⚠少":""}${l.yori?`<br>風車上 ${l.yori.judge}（${l.yori.score>0?"+":""}${l.yori.score}）`:""}${l.work!=null?`<br>収支 ${yen(l.bal)}・仕事量 ${yen(l.work)}`:""}</span></div>
 <button class="btn alt" data-del="${l.id}" style="padding:6px 10px">削除</button></div>`).join(""):'<p class="note">まだ記録がありません。</p>'}
 $("filter").onchange=render;
 $("log").onclick=e=>{const d=e.target.closest("[data-del]");if(d){if(confirm("削除しますか？")){logs=logs.filter(l=>l.id!==d.dataset.del);if(baseId===d.dataset.del)baseId=null;store();upd()}return}
@@ -389,7 +435,7 @@ const r=e.target.closest(".rec");if(r){baseId=baseId===r.dataset.id?null:r.datas
 $("kishu").addEventListener("change",()=>{if(baseId)return;const k=$("kishu").value;const c=logs.filter(l=>l.kishu===k&&l.per&&l.width).sort((a,b)=>b.spin-a.spin)[0];if(c){baseId=c.id;$("filter").value=k;render();upd()}});
 $("save").onclick=()=>{const per=upd();
 logs.unshift({id:Date.now().toString(36),date:new Date().toLocaleDateString("ja-JP"),kishu:$("kishu").value||"-",dai:$("dai").value||"-",
-width:+$("width").value||null,angle,per,inv:st.inv,mochi:st.mochi,spin:st.spin,top:shot.top,side:shot.side,bal:$("wBal").value===""?null:+$("wBal").value,rounds:+$("wR").value||null,work:work()});store()};
+width:+$("width").value||null,angle,per,yori:renderYori(),yoriAns:{...yori},inv:st.inv,mochi:st.mochi,spin:st.spin,yoriImg:shot.yori,top:shot.top,side:shot.side,bal:$("wBal").value===""?null:+$("wBal").value,rounds:+$("wR").value||null,work:work()});store()};
 $("csv").onclick=()=>{const rows=logs.map(l=>[l.date,l.kishu,l.dai,l.width||"",l.angle,l.per?l.per.toFixed(2):"",l.inv,l.spin,l.bal??"",l.rounds??"",l.work??""].join(","));
 navigator.clipboard.writeText(["日付,機種,台,ヘソ幅mm,角度,回転率,投資,回転,実収支,総R数,仕事量",...rows].join("\n")).then(()=>alert("コピーしました"),()=>alert("コピーできませんでした"))};
 renderMaster();upd();
@@ -403,6 +449,10 @@ $("apiSave").onclick=()=>{cfg.key=$("apiKey").value.trim();cfg.model=$("apiModel
 refresh();
 let ctl;$("stop").onclick=()=>ctl?.abort();
 const img=d=>({type:"image",source:{type:"base64",media_type:"image/jpeg",data:d.split(",")[1]}});
+window.aiJSON=async(imgs,prompt)=>{if(!cfg.key)throw{code:"APIキー未設定"};const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",
+headers:{"content-type":"application/json","x-api-key":cfg.key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+body:JSON.stringify({model:cfg.model,max_tokens:1000,messages:[{role:"user",content:[...imgs.map(img),{type:"text",text:prompt}]}]})});
+const data=await res.json();if(!res.ok)throw{code:res.status};const t=(data.content||[]).map(c=>c.text||"").join("");return JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1))};
 $("judge").onclick=async()=>{
 if(!shot.top){$("aiOut").textContent="真上（正面）の写真を撮ってください。";return}
 const b=base();const content=[],desc=[];
