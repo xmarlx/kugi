@@ -33,7 +33,7 @@ input,select{font:inherit;padding:8px;border:1px solid var(--line);border-radius
 .btn.alt{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
 .btn:disabled{opacity:.5}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
-.res{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;text-align:center}
 .res div{background:var(--bg);border-radius:8px;padding:8px;font-size:.85rem}
 .res b{display:block;font-size:1.25rem}
 .pos{color:var(--plus)}.neg{color:var(--minus)}
@@ -139,7 +139,8 @@ details summary{cursor:pointer;font-weight:700}
 <section class="sec">
 <h2>回転率計測</h2>
 <div class="res">
-<div>投資<b id="inv">0円</b></div>
+<div>現金投資<b id="inv">0円</b></div>
+<div>持ち玉使用<b id="mochiU">0玉</b></div>
 <div>通常回転<b id="spin">0</b></div>
 <div>1000円あたり<b id="per">—</b></div>
 </div>
@@ -148,6 +149,7 @@ details summary{cursor:pointer;font-weight:700}
 <button class="btn" id="add500">500円投入</button>
 <button class="btn" id="addSpin">回転 +1</button>
 </div>
+<div class="row" style="margin-top:8px"><button class="btn alt" id="addM125">持ち玉 +125玉</button><button class="btn alt" id="addM250">持ち玉 +250玉</button></div>
 <div class="row" style="margin-top:8px">
 <button class="btn alt" id="add10">回転 +10</button>
 <button class="btn alt" id="undo">取り消し</button>
@@ -156,6 +158,7 @@ details summary{cursor:pointer;font-weight:700}
 <div class="grid2" style="margin-top:10px">
 <div><label for="invIn">投資額を直接入力（円）</label><input id="invIn" type="number" step="500"></div>
 <div><label for="spinIn">回転数を直接入力</label><input id="spinIn" type="number"></div>
+<div><label for="mochiIn">持ち玉使用を直接入力（玉）</label><input id="mochiIn" type="number" step="125"></div>
 </div>
 </section>
 
@@ -164,8 +167,9 @@ details summary{cursor:pointer;font-weight:700}
 <div class="grid2">
 <div><label for="sph">1時間の回転数</label><input id="sph" type="number" value="200"></div>
 <div><label for="hours">稼働時間（h）</label><input id="hours" type="number" step="0.5" value="8"></div>
-<div><label for="mochi">持ち玉比率（%）</label><input id="mochi" type="number" min="0" max="100" step="5" value="0"></div>
-<div><label for="kezuri">出玉削り（%）</label><input id="kezuri" type="number" min="0" max="50" step="1" value="0"></div>
+<div><label for="nomOut">表記の出玉（個）</label><input id="nomOut" type="number" step="10" placeholder="例 1500"></div>
+<div><label for="realOut">実際の出玉（個）</label><input id="realOut" type="number" step="10" placeholder="例 1425"></div>
+<div style="grid-column:1/-1" class="note" id="mixInfo"></div>
 </div>
 <div class="res" style="margin-top:10px">
 <div style="grid-column:1/-1">実質ボーダー<b id="realB">—</b></div>
@@ -174,8 +178,8 @@ details summary{cursor:pointer;font-weight:700}
 <div>日当<b id="daily">—</b></div>
 </div>
 <p class="note">実測の回転率で計算。実測がない場合は、過去記録からの予想回転率で計算。<br>
-持ち玉比率：打った回転のうち持ち玉で回した割合。等価以外では、持ち玉で打つほど実質ボーダーが下がる。<br>
-出玉削り：大当り出玉が表記より少ない割合（例：1500個表記で実際1425個なら5%）。<br>
+持ち玉比率は、回転率計測の「現金投資」と「持ち玉使用」から自動計算（1000円＝250玉）。等価以外では、持ち玉で打つほど実質ボーダーが下がる。<br>
+出玉削りは、表記の出玉と実際に数えた出玉から計算（例：1500個表記で1425個なら5%）。空欄なら削りなし。<br>
 計算：1回転あたりの出玉価値 ＝ 1000 ÷ ボーダー ×（1 − 削り）。現金時の1回転コスト ＝ 1000 ÷ 回転率、持ち玉時 ＝ 250 ÷ 回転率 × 換金率。これを持ち玉比率で合算。ボーダーは現金投資の値を入れてください。</p>
 </section>
 
@@ -228,7 +232,7 @@ $("angle").onclick=e=>{const b=e.target.closest("button");if(!b)return;setAngle(
 function setAngle(v){angle=v;$("angle").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.v===v));upd()}
 const ANG={"上げ":1,"フラット":0,"下げ":-1,"不明":null};
 let shot={top:null,side:null};
-let st={inv:0,spin:0,hist:[]};
+let st={inv:0,spin:0,mochi:0,hist:[]};
 let logs=[];try{logs=JSON.parse(localStorage.getItem("kugi_logs2")||"[]")}catch(e){}
 let baseId=null;
 function yen(x){return (x>=0?"+":"")+Math.round(x).toLocaleString()+"円"}
@@ -300,11 +304,12 @@ ${b.spin<1500?'<p class="warn">基準の回転数が1500回未満のため、予
 <p class="note">予想回転率 ＝ 基準の回転率 ＋ 幅の差（1枚＝1回転）＋ 角度の差（1段階＝1回転）。目安です。</p>`}
 
 function upd(){
-$("inv").textContent=st.inv.toLocaleString()+"円";$("spin").textContent=st.spin;
-const per=st.inv>0?st.spin/(st.inv/1000):null;$("per").textContent=per?per.toFixed(1):"—";
+$("inv").textContent=st.inv.toLocaleString()+"円";$("mochiU").textContent=st.mochi.toLocaleString()+"玉";$("spin").textContent=st.spin;
+const per=(st.inv+st.mochi*4)>0?st.spin/((st.inv+st.mochi*4)/1000):null;$("per").textContent=per?per.toFixed(1):"—";
 $("spinWarn").textContent=st.spin>0&&st.spin<1500?`あと${1500-st.spin}回転で1500回転。それまでは回転率のブレが大きい。`:"";
 const use=per||predicted();const bd=+$("border").value,sph=+$("sph").value,h=+$("hours").value;
-const x=+$("rate").value,p=Math.min(100,Math.max(0,+$("mochi").value||0))/100,k=Math.min(50,Math.max(0,+$("kezuri").value||0))/100;
+const x=+$("rate").value,cashBalls=st.inv/4,p=(cashBalls+st.mochi)>0?st.mochi/(cashBalls+st.mochi):0,no=+$("nomOut").value,ro=+$("realOut").value,k=no>0&&ro>0?Math.max(0,1-ro/no):0;
+$("mixInfo").textContent=`持ち玉比率 ${(p*100).toFixed(0)}%（現金 ${st.inv.toLocaleString()}円＝${cashBalls.toLocaleString()}玉 / 持ち玉 ${st.mochi.toLocaleString()}玉）・出玉削り ${(k*100).toFixed(1)}%`;
 if(use&&bd>0){const g=1000/(bd*x)*(1-k);
 const evSpin=p*(g*x-250/use*x)+(1-p)*(g*x-1000/use);
 const real=(250*p*x+1000*(1-p))/(g*x);$("realB").textContent=real.toFixed(1);
@@ -313,15 +318,17 @@ $("diff").textContent=(d>=0?"+":"")+d.toFixed(1);$("hourly").textContent=yen(hr)
 [["diff",d],["hourly",hr],["daily",hr]].forEach(([k,v])=>$(k).className=v>=0?"pos":"neg")}
 else{["diff","hourly","daily"].forEach(k=>{$(k).textContent="—";$(k).className=""});$("realB").textContent="—"}
 renderCmp();if(typeof work==="function")work();return per}
-function push(){st.hist.push([st.inv,st.spin]);if(st.hist.length>300)st.hist.shift()}
+function push(){st.hist.push([st.inv,st.spin,st.mochi]);if(st.hist.length>300)st.hist.shift()}
 $("add500").onclick=()=>{push();st.inv+=500;upd()};
+$("addM125").onclick=()=>{push();st.mochi+=125;upd()};$("addM250").onclick=()=>{push();st.mochi+=250;upd()};
 $("addSpin").onclick=()=>{push();st.spin++;upd()};
 $("add10").onclick=()=>{push();st.spin+=10;upd()};
-$("undo").onclick=()=>{const h=st.hist.pop();if(h){[st.inv,st.spin]=h;upd()}};
-$("reset").onclick=()=>{if(confirm("計測をリセットしますか？")){st={inv:0,spin:0,hist:[]};upd()}};
+$("undo").onclick=()=>{const h=st.hist.pop();if(h){[st.inv,st.spin,st.mochi=0]=h;upd()}};
+$("reset").onclick=()=>{if(confirm("計測をリセットしますか？")){st={inv:0,spin:0,mochi:0,hist:[]};upd()}};
 $("invIn").onchange=e=>{push();st.inv=+e.target.value||0;upd()};
+$("mochiIn").onchange=e=>{push();st.mochi=+e.target.value||0;upd()};
 $("spinIn").onchange=e=>{push();st.spin=+e.target.value||0;upd()};
-["border","rate","sph","hours","width","mochi","kezuri"].forEach(k=>$(k).addEventListener("input",upd));
+["border","rate","sph","hours","width","nomOut","realOut"].forEach(k=>$(k).addEventListener("input",upd));
 
 
 function work(){const bal=$("wBal").value,R=+$("wR").value,sp=+$("wSpin").value||st.spin,pr=+$("wProb").value,out=+$("wOut").value,r=+$("rate").value;
@@ -382,7 +389,7 @@ const r=e.target.closest(".rec");if(r){baseId=baseId===r.dataset.id?null:r.datas
 $("kishu").addEventListener("change",()=>{if(baseId)return;const k=$("kishu").value;const c=logs.filter(l=>l.kishu===k&&l.per&&l.width).sort((a,b)=>b.spin-a.spin)[0];if(c){baseId=c.id;$("filter").value=k;render();upd()}});
 $("save").onclick=()=>{const per=upd();
 logs.unshift({id:Date.now().toString(36),date:new Date().toLocaleDateString("ja-JP"),kishu:$("kishu").value||"-",dai:$("dai").value||"-",
-width:+$("width").value||null,angle,per,inv:st.inv,spin:st.spin,top:shot.top,side:shot.side,bal:$("wBal").value===""?null:+$("wBal").value,rounds:+$("wR").value||null,work:work()});store()};
+width:+$("width").value||null,angle,per,inv:st.inv,mochi:st.mochi,spin:st.spin,top:shot.top,side:shot.side,bal:$("wBal").value===""?null:+$("wBal").value,rounds:+$("wR").value||null,work:work()});store()};
 $("csv").onclick=()=>{const rows=logs.map(l=>[l.date,l.kishu,l.dai,l.width||"",l.angle,l.per?l.per.toFixed(2):"",l.inv,l.spin,l.bal??"",l.rounds??"",l.work??""].join(","));
 navigator.clipboard.writeText(["日付,機種,台,ヘソ幅mm,角度,回転率,投資,回転,実収支,総R数,仕事量",...rows].join("\n")).then(()=>alert("コピーしました"),()=>alert("コピーできませんでした"))};
 renderMaster();upd();
