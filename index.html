@@ -41,7 +41,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .mres:empty{display:none}
 .mres button{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;font:inherit;padding:12px 10px;border:none;border-bottom:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
 .mres button span{color:var(--sub);font-size:.8rem;white-space:nowrap}
-#yoriQ .q{margin-top:10px}#yoriQ .seg{grid-template-columns:repeat(4,1fr)}#yoriQ .seg button{font-size:.8rem;padding:10px 2px}
+#warpQ .q,#yoriQ .q{margin-top:10px}#warpQ .seg,#yoriQ .seg{grid-template-columns:repeat(4,1fr)}#warpQ .seg button,#yoriQ .seg button{font-size:.8rem;padding:10px 2px}
 .note{font-size:.8rem;color:var(--sub)}
 .warn{font-size:.85rem;color:var(--minus)}
 .shots{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -131,6 +131,21 @@ details summary{cursor:pointer;font-weight:700}
 <p class="note">判定：合計+2以上＝プラス調整、−1〜+1＝無調整付近、−2以下＝マイナス調整。不明の項目は計算に入れない。<br>
 注意：寄り釘だけでは決まらない。同じ形でも風車の位置によってプラスにもマイナスにもなる。ヘソが開いているのに回らない台は、寄り・風車・こぼしのマイナス調整が原因のことが多い。最終的には回転率の実測で確認する。<br>
 出典：P-Summa「パチンコの『釘読み』の仕方」、パチンコ必勝教室「釘読み、風車、より(風車上)について」、まつたけ「釘読みクイズ Pとある-風車上」</p>
+</section>
+<section class="sec" id="warpSec">
+<h2>ワープ判定</h2>
+<p class="note">ワープは入口が広いほど良い。ステージ性能が良い機種では、他の釘が悪くてもワープが生きていれば回ることがある。</p>
+<label>ワープ入口の位置</label>
+<div class="seg" id="warpType" style="grid-template-columns:1fr 1fr"><button type="button" data-v="left" class="on">液晶の左側（多い）</button><button type="button" data-v="top">液晶の上部</button></div>
+<div class="slot" style="max-width:320px;margin-top:10px"><img id="imgWarp" alt="ワープの写真"><b>ワープ入口の写真（任意）</b>
+<div class="row" style="margin-top:6px"><button class="btn" data-cam="warp">カメラ</button></div>
+<label class="note" style="display:block;margin-top:6px">写真を選ぶ・撮る<input type="file" accept="image/*" data-file="warp"></label></div>
+<div class="row" style="margin-top:8px"><button class="btn alt" id="warpAI">写真から判定</button></div>
+<p class="note" id="warpOut" style="white-space:pre-wrap"></p>
+<div id="warpQ"></div>
+<div class="res" style="margin-top:10px"><div>ワープスコア<b id="warpScore">—</b></div><div>判定<b id="warpJudge">—</b></div></div>
+<p class="note">判定：合計+2以上＝プラス調整、−1〜+1＝無調整付近、−2以下＝マイナス調整。不明の項目は計算に入れない。ホールでプラス調整は少ないので、マイナスが小さい台を選ぶのが現実的。形は機種で違うので、同じ機種どうしで比べる。<br>
+出典：ぷろぱち「バラ釘・コボシ・ワープ」、甘デジ専門セミプロのパチンコ常勝ブログ「パチンコのワープ釘の見方」、パチプロ徒然草「パチンコの釘の見方」</p>
 </section>
 <section class="sec" id="judgeSec">
 <h2>ヘソ判定</h2>
@@ -246,7 +261,7 @@ let angle="不明";
 $("angle").onclick=e=>{const b=e.target.closest("button");if(!b)return;setAngle(b.dataset.v)};
 function setAngle(v){angle=v;$("angle").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.v===v));upd()}
 const ANG={"上げ":1,"フラット":0,"下げ":-1,"不明":null};
-let shot={top:null,side:null,yori:null};
+let shot={top:null,side:null,yori:null,warp:null};
 let st={inv:0,spin:0,mochi:0,hist:[]};
 let logs=[];try{logs=JSON.parse(localStorage.getItem("kugi_logs2")||"[]")}catch(e){}
 let baseId=null;
@@ -255,7 +270,7 @@ function yen(x){return (x>=0?"+":"")+Math.round(x).toLocaleString()+"円"}
 /* 画像縮小 */
 function toThumb(blob,max=640){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height));
 const c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.8))};im.onerror=rej;im.src=URL.createObjectURL(blob)})}
-async function setShot(k,blob){shot[k]=await toThumb(blob);$({top:"imgTop",side:"imgSide",yori:"imgYori"}[k]).src=shot[k];upd()}
+async function setShot(k,blob){shot[k]=await toThumb(blob);$({top:"imgTop",side:"imgSide",yori:"imgYori",warp:"imgWarp"}[k]).src=shot[k];upd()}
 document.querySelectorAll("[data-file]").forEach(i=>i.onchange=()=>{if(i.files[0])openAdjust(i.dataset.file,i.files[0]);i.value=""});
 
 /* ガイド付きカメラ */
@@ -267,6 +282,8 @@ txt:"真上から。ヘソ釘2本の頭を丸に、すき間の中心を点線�
 yori:{svg:`<line class="d" x1="200" y1="0" x2="200" y2="300"/><circle cx="200" cy="215" r="45"/><text x="200" y="285">風車</text>
 <circle cx="150" cy="120" r="14"/><circle cx="250" cy="120" r="14"/><text x="120" y="95">左の寄り</text><text x="280" y="95">右の寄り</text>
 <line class="g" x1="0" y1="120" x2="400" y2="120"/>`,txt:"正面から。風車を下の丸に、風車の左上・右上の寄り釘を小さい丸に合わせる。"},
+warp:{svg:`<rect class="g" x="230" y="20" width="160" height="200"/><text x="310" y="125">液晶</text>
+<circle cx="200" cy="100" r="14"/><circle cx="200" cy="170" r="14"/><path class="d" d="M120 135 L230 135"/><text x="150" y="125">入口</text>`,txt:"正面から。ワープ入口の上下（または左右）の釘を丸に、入口を点線に合わせる。"},
 side:{svg:`<line x1="70" y1="0" x2="70" y2="300"/><text x="70" y="290">板の面</text>
 <line class="d" x1="70" y1="150" x2="380" y2="150"/><text x="300" y="140">水平（フラット）</text>
 <line class="g" x1="70" y1="150" x2="380" y2="110"/><line class="g" x1="70" y1="150" x2="380" y2="190"/>
@@ -419,6 +436,36 @@ YQ.forEach(([k])=>{const v=r[k];yori[k]=[1,0,-1].includes(v)?v:null});const res=
 $("yoriOut").textContent=`確度 ${r.confidence||"-"}${res?"・判定 "+res.judge:""}\n${r.notes||""}${r.photo_advice?"\n撮影："+r.photo_advice:""}\n※結果は下の選択に反映済み。手で修正できます。`}
 catch(e){$("yoriOut").textContent="判定に失敗しました（"+(e.code||e.message||"error")+"）。"}
 finally{$("yoriAI").disabled=false}};
+/* ワープ判定 */
+const WQ={left:[["w","ワープ入口の幅（同じ機種と比べて）",[["広い",1],["普通",0],["狭い",-1],["不明",null]]],
+["u","入口の上の釘の向き",[["右上向き",1],["無調整",0],["左・下向き",-1],["不明",null]]],
+["d","入口の下の釘の向き",[["左・左下向き",1],["無調整",0],["右向き",-1],["不明",null]]]],
+top:[["w","ワープ入口の幅（同じ機種と比べて）",[["広い",1],["普通",0],["狭い",-1],["不明",null]]],
+["r","入口の右側の釘の向き",[["右下向き",1],["無調整",0],["左・上向き",-1],["不明",null]]],
+["l","入口の左側の釘の向き",[["左上向き",1],["無調整",0],["右・下向き",-1],["不明",null]]]]};
+let warpType="left",warp={};
+function renderWarp(){const Q=WQ[warpType];$("warpQ").innerHTML=Q.map(([k,t,op])=>`<div class="q"><label>${t}</label><div class="seg" data-k="${k}">${op.map(([l,v])=>`<button type="button" data-v="${v}" class="${(warp[k]===undefined?null:warp[k])===v?"on":""}">${l}</button>`).join("")}</div></div>`).join("");
+const vals=Q.map(q=>warp[q[0]]).filter(v=>typeof v==="number");
+if(!vals.length){$("warpScore").textContent="—";$("warpJudge").textContent="—";$("warpJudge").className="";return null}
+const sc=vals.reduce((a,b)=>a+b,0);$("warpScore").textContent=(sc>0?"+":"")+sc;
+const j=sc>=2?"プラス":sc<=-2?"マイナス":"無調整付近";$("warpJudge").textContent=j;$("warpJudge").className=sc>=2?"pos":sc<=-2?"neg":"";return {score:sc,judge:j,type:warpType}}
+$("warpQ").onclick=e=>{const b=e.target.closest("button");if(!b)return;warp[b.parentNode.dataset.k]=b.dataset.v==="null"?null:+b.dataset.v;renderWarp()};
+$("warpType").onclick=e=>{const b=e.target.closest("button");if(!b)return;warpType=b.dataset.v;warp={};$("warpType").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));renderWarp()};
+renderWarp();
+$("warpAI").onclick=async()=>{if(!shot.warp){$("warpOut").textContent="ワープ入口の写真を撮ってください。";return}
+if(!window.aiJSON){$("warpOut").textContent="写真判定が使えない状態です。手で選んでください。";return}
+$("warpAI").disabled=true;$("warpOut").textContent="判定中…";
+const Q=WQ[warpType];
+const prompt=`あなたはパチンコの釘読みの専門家です。画像は、パチンコ台のワープ入口（${warpType==="left"?"液晶の左側":"液晶の上部"}）の釘を正面から撮影したものです。機種名：${$("kishu").value||"不明"}
+次の項目を1/0/-1で判定してください。判別できない項目はnull。
+${Q.map(([k,t,op])=>`${k}: ${t}。${op.filter(o=>o[1]!==null).map(o=>o[0]+"="+o[1]).join("、")}`).join("\n")}
+玉がワープに入りやすいかという観点でコメントすること。
+JSONのみで出力（前置き・コードブロック禁止）:{${Q.map(q=>`"${q[0]}":0`).join(",")},"confidence":"high|mid|low","notes":"根拠を日本語で簡潔に","photo_advice":"撮り直しの指示または空文字"}`;
+try{const r=await window.aiJSON([shot.warp],prompt);
+Q.forEach(([k])=>{const v=r[k];warp[k]=[1,0,-1].includes(v)?v:null});const res=renderWarp();
+$("warpOut").textContent=`確度 ${r.confidence||"-"}${res?"・判定 "+res.judge:""}\n${r.notes||""}${r.photo_advice?"\n撮影："+r.photo_advice:""}\n※結果は下の選択に反映済み。手で修正できます。`}
+catch(e){$("warpOut").textContent="判定に失敗しました（"+(e.code||e.message||"error")+"）。"}
+finally{$("warpAI").disabled=false}};
 /* 記録 */
 function store(){try{localStorage.setItem("kugi_logs2",JSON.stringify(logs))}catch(e){alert("保存できませんでした。古い記録を削除してください。")}render()}
 function render(){
@@ -427,7 +474,7 @@ $("kishuList").innerHTML=[...new Set([...master().keys(),...ks])].map(k=>`<optio
 const f=$("filter"),cur=f.value;f.innerHTML='<option value="">すべて</option>'+ks.map(k=>`<option ${k===cur?"selected":""}>${k}</option>`).join("");
 const list=logs.filter(l=>!f.value||l.kishu===f.value);
 $("log").innerHTML=list.length?list.map(l=>`<div class="rec ${l.id===baseId?"sel":""}" data-id="${l.id}"><img alt="" ${l.top?`src="${l.top}"`:""}>
-<div><b>${l.kishu}</b> ${l.dai}番 <span class="note">${l.date}</span><br><span class="note">ヘソ ${l.width||"—"}mm・${l.angle}・回転率 ${l.per?l.per.toFixed(1):"—"}（${l.spin}回転）${l.spin<1500?" ⚠少":""}${l.yori?`<br>風車上 ${l.yori.judge}（${l.yori.score>0?"+":""}${l.yori.score}）`:""}${l.work!=null?`<br>収支 ${yen(l.bal)}・仕事量 ${yen(l.work)}`:""}</span></div>
+<div><b>${l.kishu}</b> ${l.dai}番 <span class="note">${l.date}</span><br><span class="note">ヘソ ${l.width||"—"}mm・${l.angle}・回転率 ${l.per?l.per.toFixed(1):"—"}（${l.spin}回転）${l.spin<1500?" ⚠少":""}${l.yori?`<br>風車上 ${l.yori.judge}（${l.yori.score>0?"+":""}${l.yori.score}）`:""}${l.warp?` ワープ ${l.warp.judge}（${l.warp.score>0?"+":""}${l.warp.score}）`:""}${l.work!=null?`<br>収支 ${yen(l.bal)}・仕事量 ${yen(l.work)}`:""}</span></div>
 <button class="btn alt" data-del="${l.id}" style="padding:6px 10px">削除</button></div>`).join(""):'<p class="note">まだ記録がありません。</p>'}
 $("filter").onchange=render;
 $("log").onclick=e=>{const d=e.target.closest("[data-del]");if(d){if(confirm("削除しますか？")){logs=logs.filter(l=>l.id!==d.dataset.del);if(baseId===d.dataset.del)baseId=null;store();upd()}return}
@@ -435,7 +482,7 @@ const r=e.target.closest(".rec");if(r){baseId=baseId===r.dataset.id?null:r.datas
 $("kishu").addEventListener("change",()=>{if(baseId)return;const k=$("kishu").value;const c=logs.filter(l=>l.kishu===k&&l.per&&l.width).sort((a,b)=>b.spin-a.spin)[0];if(c){baseId=c.id;$("filter").value=k;render();upd()}});
 $("save").onclick=()=>{const per=upd();
 logs.unshift({id:Date.now().toString(36),date:new Date().toLocaleDateString("ja-JP"),kishu:$("kishu").value||"-",dai:$("dai").value||"-",
-width:+$("width").value||null,angle,per,yori:renderYori(),yoriAns:{...yori},inv:st.inv,mochi:st.mochi,spin:st.spin,yoriImg:shot.yori,top:shot.top,side:shot.side,bal:$("wBal").value===""?null:+$("wBal").value,rounds:+$("wR").value||null,work:work()});store()};
+width:+$("width").value||null,angle,per,yori:renderYori(),warp:renderWarp(),warpAns:{...warp},warpImg:shot.warp,yoriAns:{...yori},inv:st.inv,mochi:st.mochi,spin:st.spin,yoriImg:shot.yori,top:shot.top,side:shot.side,bal:$("wBal").value===""?null:+$("wBal").value,rounds:+$("wR").value||null,work:work()});store()};
 $("csv").onclick=()=>{const rows=logs.map(l=>[l.date,l.kishu,l.dai,l.width||"",l.angle,l.per?l.per.toFixed(2):"",l.inv,l.spin,l.bal??"",l.rounds??"",l.work??""].join(","));
 navigator.clipboard.writeText(["日付,機種,台,ヘソ幅mm,角度,回転率,投資,回転,実収支,総R数,仕事量",...rows].join("\n")).then(()=>alert("コピーしました"),()=>alert("コピーできませんでした"))};
 renderMaster();upd();
