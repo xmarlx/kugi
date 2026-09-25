@@ -70,6 +70,17 @@ details summary{cursor:pointer;font-weight:700}
 <div><label for="border">ボーダー（回/1000円）</label><input id="border" type="number" step="0.1" value="18"></div>
 <div><label for="rate">換金率（1玉あたり）</label><select id="rate"><option value="4">等価（4円）</option><option value="3.57">28玉（3.57円）</option><option value="3.33">30玉（3.33円）</option><option value="3.03">33玉（3.03円）</option></select></div>
 </div>
+<details style="margin-top:10px"><summary>機種の登録</summary>
+<p class="note">人気機種20機種は登録済みです。機種名を選ぶと、換金率に合わせてボーダーが自動で入ります。ボーダーの出典：DMMぱちタウン（P-Summa「人気機種ボーダーランキング2026」2026年2月27日掲載より）。ホールの状況や計算方法で変わる目安です。</p>
+<p class="note">一覧にない機種はここで追加できます。同じ名前で登録すると上書きします。</p>
+<div class="grid2"><div style="grid-column:1/-1"><label for="mName">機種名</label><input id="mName"></div>
+<div><label for="mB1">等価ボーダー（必須）</label><input id="mB1" type="number" step="0.1"></div>
+<div><label for="mB2">28玉ボーダー</label><input id="mB2" type="number" step="0.1"></div>
+<div><label for="mB3">30玉ボーダー</label><input id="mB3" type="number" step="0.1"></div>
+<div><label for="mB4">33玉ボーダー</label><input id="mB4" type="number" step="0.1"></div></div>
+<div class="row" style="margin-top:8px"><button class="btn alt" id="mAdd">追加</button></div>
+<p class="note" id="mMsg"></p><div id="mList"></div>
+</details>
 </section>
 
 <section class="sec">
@@ -304,11 +315,33 @@ const theo=sp/pr,luck=R-theo,w=+bal-luck*out*r;
 $("wTheo").textContent=theo.toFixed(1)+"R";$("wLuck").textContent=(luck>=0?"+":"")+luck.toFixed(1)+"R";$("wLuck").className=luck>=0?"pos":"neg";
 $("wWork").textContent=yen(w);$("wWork").className=w>=0?"pos":"neg";return Math.round(w)}
 ["wBal","wR","wSpin","wProb","wOut","rate"].forEach(k=>$(k).addEventListener("input",work));
+/* 機種マスタ */
+const PRESET=[["e東京リベンジャーズ",16.5,17.4,18.0,18.8],["e Re:ゼロから始める異世界生活 season2",16.6,17.5,18.1,18.9],
+["e 新世紀エヴァンゲリオン ～はじまりの記憶～",16.7,17.6,18.2,19.1],["e 東京喰種",16.7,17.5,18.1,18.8],
+["P Re:ゼロから始める異世界生活 鬼がかりver.",16.7,17.6,18.2,19.0],["e 北斗の拳11 暴凶星",16.8,17.8,18.4,19.2],
+["ぱちんこ シン・エヴァンゲリオン Type レイ",17.1,18.1,18.6,19.5],["e牙狼12黄金騎士極限",17.2,18.1,18.7,19.6],
+["Pスーパー海物語IN沖縄6",17.6,18.6,19.2,20.0],["P大海物語5スペシャル",17.7,18.7,19.3,20.1],
+["P北斗の拳 暴凶星",17.7,18.7,19.3,20.1],["P大海物語5",17.7,18.6,19.2,20.1],
+["新世紀エヴァンゲリオン～未来への咆哮～",17.8,18.7,19.4,20.2],["eFからくりサーカス2 魔王ver.",18.1,19.1,19.7,20.7],
+["PAわんわんパラダイスV",18.1,18.9,19.4,20.2],["PA大海物語5 Withアグネス・ラム",18.3,19.1,19.6,20.4],
+["PA新海物語",18.5,19.4,19.9,20.7],["PAスーパー海物語 IN 沖縄5 with アイマリン",18.6,19.5,20.0,20.8],
+["P大海物語4スペシャルBLACK",18.7,19.6,20.2,21.1],["P大海物語4スペシャル",20.2,21.3,22.0,23.0]];
+const RIDX={"4":1,"3.57":2,"3.33":3,"3.03":4};
+let custom=[];try{custom=JSON.parse(localStorage.getItem("kugi_machines")||"[]")}catch(e){}
+function master(){const m=new Map();PRESET.forEach(r=>m.set(r[0],r));custom.forEach(r=>m.set(r[0],r));return m}
+function applyBorder(){const r=master().get($("kishu").value.trim());if(!r)return;const v=r[RIDX[$("rate").value]];if(v){$("border").value=v;upd()}}
+$("kishu").addEventListener("change",applyBorder);$("rate").addEventListener("change",applyBorder);
+function renderMaster(){$("mList").innerHTML=custom.length?custom.map((r,i)=>`<div class="rec" style="grid-template-columns:1fr auto"><div><b>${r[0]}</b><br><span class="note">等価${r[1]} / 28玉${r[2]||"—"} / 30玉${r[3]||"—"} / 33玉${r[4]||"—"}</span></div><button class="btn alt" data-mdel="${i}" style="padding:6px 10px">削除</button></div>`).join(""):'<p class="note">追加した機種はまだありません。</p>';render()}
+$("mList").onclick=e=>{const b=e.target.closest("[data-mdel]");if(!b)return;custom.splice(+b.dataset.mdel,1);try{localStorage.setItem("kugi_machines",JSON.stringify(custom))}catch(e){}renderMaster()};
+$("mAdd").onclick=()=>{const n=$("mName").value.trim(),v=["mB1","mB2","mB3","mB4"].map(k=>+$(k).value||null);
+if(!n||!v[0]){$("mMsg").textContent="機種名と等価ボーダーは必須です。";return}
+custom=custom.filter(r=>r[0]!==n);custom.push([n,...v]);try{localStorage.setItem("kugi_machines",JSON.stringify(custom))}catch(e){}
+["mName","mB1","mB2","mB3","mB4"].forEach(k=>$(k).value="");$("mMsg").textContent="登録しました。";renderMaster()};
 /* 記録 */
 function store(){try{localStorage.setItem("kugi_logs2",JSON.stringify(logs))}catch(e){alert("保存できませんでした。古い記録を削除してください。")}render()}
 function render(){
 const ks=[...new Set(logs.map(l=>l.kishu))];
-$("kishuList").innerHTML=ks.map(k=>`<option value="${k}">`).join("");
+$("kishuList").innerHTML=[...new Set([...master().keys(),...ks])].map(k=>`<option value="${k}">`).join("");
 const f=$("filter"),cur=f.value;f.innerHTML='<option value="">すべて</option>'+ks.map(k=>`<option ${k===cur?"selected":""}>${k}</option>`).join("");
 const list=logs.filter(l=>!f.value||l.kishu===f.value);
 $("log").innerHTML=list.length?list.map(l=>`<div class="rec ${l.id===baseId?"sel":""}" data-id="${l.id}"><img alt="" ${l.top?`src="${l.top}"`:""}>
@@ -323,7 +356,7 @@ logs.unshift({id:Date.now().toString(36),date:new Date().toLocaleDateString("ja-
 width:+$("width").value||null,angle,per,inv:st.inv,spin:st.spin,top:shot.top,side:shot.side,bal:$("wBal").value===""?null:+$("wBal").value,rounds:+$("wR").value||null,work:work()});store()};
 $("csv").onclick=()=>{const rows=logs.map(l=>[l.date,l.kishu,l.dai,l.width||"",l.angle,l.per?l.per.toFixed(2):"",l.inv,l.spin,l.bal??"",l.rounds??"",l.work??""].join(","));
 navigator.clipboard.writeText(["日付,機種,台,ヘソ幅mm,角度,回転率,投資,回転,実収支,総R数,仕事量",...rows].join("\n")).then(()=>alert("コピーしました"),()=>alert("コピーできませんでした"))};
-render();upd();
+renderMaster();upd();
 
 /* 写真判定（Anthropic API） */
 (()=>{
