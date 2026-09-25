@@ -74,6 +74,8 @@ details summary{cursor:pointer;font-weight:700}
 <div id="mResult" class="mres" role="listbox"></div></div>
 <div><label for="kishu">機種名</label><input id="kishu" list="kishuList"><datalist id="kishuList"></datalist></div>
 <div><label for="dai">台番号</label><input id="dai" inputmode="numeric"></div>
+<div><label for="pref">都道府県（任意）</label><input id="pref" placeholder="例 山口県"></div>
+<div><label for="hall">店名（任意）</label><input id="hall"></div>
 <div><label for="border">ボーダー（回/1000円）</label><input id="border" type="number" step="0.1" value="18"></div>
 <div><label for="rate">換金率（1玉あたり）</label><select id="rate"><option value="4">等価（4円）</option><option value="3.57">28玉（3.57円）</option><option value="3.33">30玉（3.33円）</option><option value="3.03">33玉（3.03円）</option></select></div>
 </div>
@@ -228,6 +230,14 @@ details summary{cursor:pointer;font-weight:700}
 <p class="note">仕事量 ＝ 実収支 −（総R数 − 通常時総回転数 ÷ 1Rトータル確率）× 1R平均出玉 × 換金率<br>例：−46000 −（112 − 2241÷9.33）× 140 × 3.57 ≒ +18,071円</p>
 </section>
 
+<section class="sec" id="shareSec">
+<h2>データ提供</h2>
+<p class="note">記録を匿名で送ると、みんなのデータを集計して釘読みの精度を上げるのに使います。名前・連絡先・位置情報は送りません。詳しくは<a href="privacy.html">プライバシーポリシー</a>をご覧ください。</p>
+<label class="row" style="gap:10px;margin-top:6px"><input type="checkbox" id="shareOn" style="width:auto"> <span>記録を保存するときに匿名で送信する</span></label>
+<label class="row" style="gap:10px;margin-top:6px"><input type="checkbox" id="sharePhoto" style="width:auto"> <span>写真も送る（釘の接写のみ。人が写った写真は送らないでください）</span></label>
+<p class="note" id="shareMsg"></p>
+<p class="note" id="shareId"></p>
+</section>
 <section class="sec">
 <h2>記録</h2>
 <div class="row"><button class="btn" id="save">この台を保存</button><button class="btn alt" id="csv">CSVをコピー</button></div>
@@ -466,6 +476,21 @@ Q.forEach(([k])=>{const v=r[k];warp[k]=[1,0,-1].includes(v)?v:null});const res=r
 $("warpOut").textContent=`確度 ${r.confidence||"-"}${res?"・判定 "+res.judge:""}\n${r.notes||""}${r.photo_advice?"\n撮影："+r.photo_advice:""}\n※結果は下の選択に反映済み。手で修正できます。`}
 catch(e){$("warpOut").textContent="判定に失敗しました（"+(e.code||e.message||"error")+"）。"}
 finally{$("warpAI").disabled=false}};
+/* データ提供 */
+const ENDPOINT="";
+let share={on:false,photo:false,uid:""};try{Object.assign(share,JSON.parse(localStorage.getItem("kugi_share")||"{}"))}catch(e){}
+if(!share.uid){share.uid=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2))}
+const saveShare=()=>{try{localStorage.setItem("kugi_share",JSON.stringify(share))}catch(e){}};saveShare();
+$("shareId").textContent="端末ID："+share.uid;$("shareOn").checked=share.on;$("sharePhoto").checked=share.photo;
+if(!ENDPOINT){$("shareOn").disabled=true;$("sharePhoto").disabled=true;$("shareMsg").textContent="送信先が未設定のため、今は送信できません。"}
+$("shareOn").onchange=e=>{if(e.target.checked&&!confirm("記録を匿名で送信します。送信するのは、機種・台番号・都道府県・店名・ヘソ幅・角度・風車上とワープの判定・回転率・回転数・投資・持ち玉・収支・仕事量・保存日時と、端末ごとのランダムなIDです。名前や連絡先は送りません。同意しますか？")){e.target.checked=false;return}share.on=e.target.checked;saveShare()};
+$("sharePhoto").onchange=e=>{share.photo=e.target.checked;saveShare()};
+async function sendRecord(l){if(!ENDPOINT||!share.on)return;
+const d={uid:share.uid,sentAt:new Date().toISOString(),date:l.date,kishu:l.kishu,dai:l.dai,pref:$("pref").value,hall:$("hall").value,border:+$("border").value,rate:+$("rate").value,
+width:l.width,angle:l.angle,per:l.per,spin:l.spin,inv:l.inv,mochi:l.mochi,bal:l.bal,rounds:l.rounds,work:l.work,
+yori:l.yori?l.yori.score:null,yoriAns:l.yoriAns,warp:l.warp?l.warp.score:null,warpType:l.warp?l.warp.type:null,warpAns:l.warpAns};
+if(share.photo){d.photos={top:l.top,side:l.side,yori:l.yoriImg,warp:l.warpImg}}
+try{await fetch(ENDPOINT,{method:"POST",mode:"no-cors",body:JSON.stringify(d)});$("shareMsg").textContent="送信しました（"+new Date().toLocaleTimeString("ja-JP")+"）"}catch(e){$("shareMsg").textContent="送信できませんでした。電波を確認してください。"}}
 /* 記録 */
 function store(){try{localStorage.setItem("kugi_logs2",JSON.stringify(logs))}catch(e){alert("保存できませんでした。古い記録を削除してください。")}render()}
 function render(){
@@ -482,7 +507,7 @@ const r=e.target.closest(".rec");if(r){baseId=baseId===r.dataset.id?null:r.datas
 $("kishu").addEventListener("change",()=>{if(baseId)return;const k=$("kishu").value;const c=logs.filter(l=>l.kishu===k&&l.per&&l.width).sort((a,b)=>b.spin-a.spin)[0];if(c){baseId=c.id;$("filter").value=k;render();upd()}});
 $("save").onclick=()=>{const per=upd();
 logs.unshift({id:Date.now().toString(36),date:new Date().toLocaleDateString("ja-JP"),kishu:$("kishu").value||"-",dai:$("dai").value||"-",
-width:+$("width").value||null,angle,per,yori:renderYori(),warp:renderWarp(),warpAns:{...warp},warpImg:shot.warp,yoriAns:{...yori},inv:st.inv,mochi:st.mochi,spin:st.spin,yoriImg:shot.yori,top:shot.top,side:shot.side,bal:$("wBal").value===""?null:+$("wBal").value,rounds:+$("wR").value||null,work:work()});store()};
+width:+$("width").value||null,angle,per,yori:renderYori(),warp:renderWarp(),warpAns:{...warp},warpImg:shot.warp,yoriAns:{...yori},inv:st.inv,mochi:st.mochi,spin:st.spin,yoriImg:shot.yori,top:shot.top,side:shot.side,bal:$("wBal").value===""?null:+$("wBal").value,rounds:+$("wR").value||null,work:work()});store();sendRecord(logs[0])};
 $("csv").onclick=()=>{const rows=logs.map(l=>[l.date,l.kishu,l.dai,l.width||"",l.angle,l.per?l.per.toFixed(2):"",l.inv,l.spin,l.bal??"",l.rounds??"",l.work??""].join(","));
 navigator.clipboard.writeText(["日付,機種,台,ヘソ幅mm,角度,回転率,投資,回転,実収支,総R数,仕事量",...rows].join("\n")).then(()=>alert("コピーしました"),()=>alert("コピーできませんでした"))};
 renderMaster();upd();
