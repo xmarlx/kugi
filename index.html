@@ -96,7 +96,7 @@ details summary{cursor:pointer;font-weight:700}
 <h2>ヘソを撮影</h2>
 <div class="shots">
 <div class="slot"><img id="imgTop" alt="ヘソの写真"><b>ヘソ（メイン）</b><div class="note">ヘソ幅と角度を見る</div>
-<div class="seg" id="topMode" style="grid-template-columns:1fr 1fr;margin:6px 0"><button type="button" data-v="low" class="on">下から</button><button type="button" data-v="front">正面</button></div>
+<div class="seg" id="topMode" style="grid-template-columns:1fr 1fr;margin:6px 0"><button type="button" data-v="low" class="on">上から</button><button type="button" data-v="front">正面</button></div>
 <div class="row" style="margin-top:6px"><button class="btn" data-cam="top">カメラ</button></div>
 <label class="note" style="display:block;margin-top:6px">写真を選ぶ・撮る（撮影後にガイドで位置合わせ）<input type="file" accept="image/*" data-file="top"></label></div>
 <div class="slot"><img id="imgSide" alt="真横の写真"><b>真横（任意）</b><div class="note">撮れる場合だけ。角度の精度が上がる</div>
@@ -105,7 +105,7 @@ details summary{cursor:pointer;font-weight:700}
 </div>
 <p class="note" id="camMsg" role="status"></p>
 <details style="margin-top:6px"><summary>撮り方の見本</summary>
-<p class="note"><b>下から（おすすめ）</b>：筐体の形で正面から撮りにくい場合は、台の下側から見上げるように撮る。ヘソ釘2本と入賞口が写り、釘の根元から頭までの軸が見える角度にする。ガイドの縦線に釘の根元側を合わせると、傾きが分かりやすい。</p>
+<p class="note"><b>上から（おすすめ）</b>：筐体の形で正面から撮りにくい場合は、ガラスの上側からヘソを見下ろすように撮る。ヘソ釘2本と入賞口が写り、釘の根元から頭までの軸が見える角度にする。ガイドの縦線に釘の根元側を合わせると、傾きが分かりやすい。</p>
 <p class="note"><b>正面</b>：ヘソ釘2本の真上からスマホを下に向け、2本の釘の頭とその間のすき間が大きく写るように接写する。釘の頭をガイドの丸に合わせる。</p>
 <svg class="smp" viewBox="0 0 300 225" role="img" aria-label="真上からの撮影見本"><rect width="300" height="225" fill="#dfe6ea"/>
 <rect x="95" y="150" width="110" height="40" rx="4" fill="#c9a33d"/><text x="150" y="176" font-size="12" text-anchor="middle" fill="#1d2a33">入賞口</text>
@@ -302,7 +302,7 @@ low:{svg:`<line x1="150" y1="20" x2="150" y2="280"/><line x1="250" y1="20" x2="2
 <text x="150" y="16">左のヘソ釘</text><text x="250" y="16">右のヘソ釘</text>
 <circle cx="150" cy="215" r="12"/><circle cx="250" cy="215" r="12"/><text x="200" y="240">釘の頭</text>
 <rect class="d" x="130" y="250" width="140" height="40" rx="6"/><text x="200" y="275">入賞口</text>`,
-txt:"台の下側から見上げて撮る。白い縦線にヘソ釘の根元側を合わせ、釘の頭を丸に合わせる。釘が縦線からどちらに傾いているかで角度、頭どうしの間隔で幅を見る。"},
+txt:"ガラスの上側から、ヘソを見下ろすように撮る。白い縦線にヘソ釘の根元側を合わせ、釘の頭を丸に合わせる。釘が縦線からどちらに傾いているかで角度、頭どうしの間隔で幅を見る。"},
 side:{svg:`<line x1="70" y1="0" x2="70" y2="300"/><text x="70" y="290">板の面</text>
 <line class="d" x1="70" y1="150" x2="380" y2="150"/><text x="300" y="140">水平（フラット）</text>
 <line class="g" x1="70" y1="150" x2="380" y2="110"/><line class="g" x1="70" y1="150" x2="380" y2="190"/>
@@ -537,7 +537,7 @@ const data=await res.json();if(!res.ok)throw{code:res.status};const t=(data.cont
 $("judge").onclick=async()=>{
 if(!shot.top){$("aiOut").textContent="ヘソ（メイン）の写真を撮ってください。";return}
 const b=base();const content=[],desc=[];
-if(shot.top){content.push(img(shot.top));desc.push(`${content.length}枚目：評価する台のヘソ釘を${topMode==="low"?"台の下側から見上げて（あおりで）撮影。釘の軸は手前に向かって伸びて見え、釘の頭が手前側":"正面から撮影"}`)}
+if(shot.top){content.push(img(shot.top));desc.push(`${content.length}枚目：評価する台のヘソ釘を${topMode==="low"?"ガラスの上側から見下ろして撮影。釘の軸は盤面から手前に向かって伸びて見え、釘の頭が手前側":"正面から撮影"}`)}
 if(shot.side){content.push(img(shot.side));desc.push(`${content.length}枚目：評価する台のヘソ釘を真横から撮影`)}
 if(b?.top&&b.width){content.push(img(b.top));desc.push(`${content.length}枚目：比較用。同機種で過去に測ったヘソ（幅${b.width}mm、真上）`)}
 const prompt=`あなたはパチンコの釘読みの専門家です。
@@ -545,7 +545,7 @@ ${desc.join("\n")}
 機種名：${$("kishu").value||"不明"}
 前提：パチンコ玉の直径は11mm。ヘソ幅は0.25mm刻み（板ゲージ1枚）で11.25〜14.00mmの範囲で調整される。
 1) 真上の写真からヘソ幅（2本のヘソ釘の間の距離）を0.25mm刻みで推定。${b?.top?"比較用写真との差（何枚分広い／狭い）を優先して推定。":"写真内に玉があれば直径11mmを尺度に使う。"}
-2) ヘソ釘が板に対して上げ・フラット・下げのどれかを判定し、角度を推定。真横の写真があればそれを優先し、釘の根元を見る。真横の写真がない場合はメインの写真で判定する。下から見上げた写真なら、釘の軸が根元から頭にかけて垂直からどちらに傾いているか（頭が上側＝盤面奥から手前に向かって上がっていれば上げ）と、左右の釘の傾きの対称性を見る。正面の写真なら、釘の頭と根元の位置のずれ（上げなら頭が根元より上）や影の向きから判定し、angle_confidenceは原則lowかmidにする。判別できなければangleは"不明"。
+2) ヘソ釘が板に対して上げ・フラット・下げのどれかを判定し、角度を推定。真横の写真があればそれを優先し、釘の根元を見る。真横の写真がない場合はメインの写真で判定する。上から見下ろした写真なら、釘の軸が根元から頭にかけて垂直からどちらに傾いているか（頭が上側＝盤面奥から手前に向かって上がっていれば上げ）と、左右の釘の傾きの対称性を見る。正面の写真なら、釘の頭と根元の位置のずれ（上げなら頭が根元より上）や影の向きから判定し、angle_confidenceは原則lowかmidにする。判別できなければangleは"不明"。
 写真がない・判別できない項目はnullとし、confidenceをlowにする。
 JSONのみで出力（前置き・コードブロック禁止）:
 {"width_mm":12.25,"width_confidence":"high|mid|low","angle":"上げ|フラット|下げ|不明","angle_deg":0,"angle_confidence":"high|mid|low","notes":"根拠を日本語で簡潔に","photo_advice":"撮り直しが必要ならその指示、不要なら空文字"}`;
