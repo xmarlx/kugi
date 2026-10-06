@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420">
+  <!-- 低電力モード：胸元ワンポイント -->
+  <rect x="150" y="60" width="270" height="130" rx="22" fill="none" stroke="{{INK}}" stroke-width="18"/>
+  <rect x="420" y="98" width="28" height="54" rx="6" fill="{{INK}}"/>
+  <rect x="176" y="86" width="56" height="78" rx="8" fill="{{INK}}"/>
+  <text x="300" y="330" text-anchor="middle" font-family="'Zen Old Mincho', 'Hiragino Mincho ProN', serif" font-weight="900" font-size="78" letter-spacing="6" fill="{{INK}}">低電力モード</text>
+</svg>

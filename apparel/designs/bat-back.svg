@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1400">
+  <!-- ローバット（背中）：残り1%の電池にぶら下がって充電中のコウモリ -->
+  <rect x="330" y="80" width="520" height="210" rx="40" fill="none" stroke="{{INK}}" stroke-width="30"/>
+  <rect x="850" y="140" width="50" height="90" rx="10" fill="{{INK}}"/>
+  <rect x="362" y="112" width="80" height="146" rx="14" fill="#e5412b"/>
+  <path d="M540 290 L552 380 M660 290 L648 380" stroke="{{INK}}" stroke-width="26" stroke-linecap="round"/>
+  <path d="M600 380 C 390 380 285 530 315 710 C 270 680 210 710 198 770 C 255 746 300 776 312 830 C 336 950 450 1040 600 1040 C 750 1040 864 950 888 830 C 900 776 945 746 1002 770 C 990 710 930 680 885 710 C 915 530 810 380 600 380 Z" fill="{{INK}}"/>
+  <path d="M450 1016 L414 1136 L528 1046 Z M750 1016 L786 1136 L672 1046 Z" fill="{{INK}}"/>
+  <path d="M480 860 Q516 824 552 860 M648 860 Q684 824 720 860" fill="none" stroke="{{BG}}" stroke-width="22" stroke-linecap="round"/>
+  <circle cx="450" cy="926" r="30" fill="#f29bb0"/><circle cx="750" cy="926" r="30" fill="#f29bb0"/>
+  <g font-family="DotGothic16, monospace" fill="{{INK}}"><text x="930" y="470" font-size="80">z</text><text x="1000" y="400" font-size="60">z</text><text x="1050" y="345" font-size="44">z</text></g>
+  <text x="600" y="1290" text-anchor="middle" font-family="DotGothic16, monospace" font-size="120" fill="{{INK}}">ちょっと充電中</text>
+  <text x="600" y="1375" text-anchor="middle" font-family="DotGothic16, monospace" font-size="44" letter-spacing="14" fill="{{INK}}">LOWBATT CLUB</text>
+</svg>

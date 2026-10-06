@@ -1,0 +1,150 @@
+{
+  "shop": {
+    "brand": "LOWBATT",
+    "tagline": "充電中につき、通知オフ。",
+    "currency": "jpy",
+    "shippingFee": 600,
+    "freeShippingThreshold": 8000,
+    "storeUrl": "",
+    "checkoutEndpoint": ""
+  },
+  "products": [
+    {
+      "slug": "lowbatt-bat-tee",
+      "name": "ローバット 充電中 ボクシーTee",
+      "type": "tee",
+      "prints": [
+        { "side": "front", "design": "bat-chest", "area": "chest" },
+        { "side": "back", "design": "bat-back", "area": "full" }
+      ],
+      "hero": "back",
+      "finish": "vintage",
+      "price": 4400,
+      "cost": null,
+      "status": "active",
+      "description": "ブランドキャラクター「ローバット」。胸にワンポイント、背中に残り1%の電池にぶら下がって眠る姿。肩を落としたボクシーシルエット。",
+      "material": "コットン100%（ヘビーウェイト）",
+      "colors": [
+        { "name": "オフホワイト", "hex": "#f1ede4", "ink": "#1d1d1b" },
+        { "name": "ウォッシュブラック", "hex": "#2b2a28", "ink": "#ece6da" },
+        { "name": "サンド", "hex": "#d8c7a4", "ink": "#3a2a1c" }
+      ],
+      "sizes": ["S", "M", "L", "XL"],
+      "fulfillment": { "provider": "printful", "variantIds": {} }
+    },
+    {
+      "slug": "lowbatt-college-hoodie",
+      "name": "LOWBATT カレッジロゴ フーディー",
+      "type": "hoodie",
+      "prints": [{ "side": "front", "design": "college", "area": "full" }],
+      "hero": "front",
+      "finish": "vintage",
+      "price": 8800,
+      "cost": null,
+      "status": "active",
+      "description": "アーチ状のカレッジロゴと校章風のローバット。「DEPT. OF OFFLINE（圏外学部）」。",
+      "material": "コットン80% / ポリエステル20%",
+      "colors": [
+        { "name": "ヘザーグレー", "hex": "#a7a8aa", "ink": "#1f2a44" },
+        { "name": "ネイビー", "hex": "#1f2a44", "ink": "#ece6da" },
+        { "name": "バーガンディ", "hex": "#5e1f2a", "ink": "#ece6da" }
+      ],
+      "sizes": ["S", "M", "L", "XL"],
+      "fulfillment": { "provider": "printful", "variantIds": {} }
+    },
+    {
+      "slug": "kengai-tee",
+      "name": "圏外 縦書きTee",
+      "type": "tee",
+      "prints": [
+        { "side": "front", "design": "kengai-chest", "area": "chest" },
+        { "side": "back", "design": "kengai-back", "area": "full" }
+      ],
+      "hero": "back",
+      "finish": "vintage",
+      "price": 4400,
+      "cost": null,
+      "status": "active",
+      "description": "胸にガラケーの「圏外」表示、背中に縦書きの大きな明朝体。電波の届かない時間をまとう一枚。",
+      "material": "コットン100%（ヘビーウェイト）",
+      "colors": [
+        { "name": "ウォッシュブラック", "hex": "#2b2a28", "ink": "#ece6da" },
+        { "name": "バーガンディ", "hex": "#5e1f2a", "ink": "#f1e4d4" }
+      ],
+      "sizes": ["S", "M", "L", "XL"],
+      "fulfillment": { "provider": "printful", "variantIds": {} }
+    },
+    {
+      "slug": "kengai-heart-baby-tee",
+      "name": "ただいま圏外中♡ ベビーTee",
+      "type": "babytee",
+      "prints": [{ "side": "front", "design": "shoujo-heart", "area": "full" }],
+      "hero": "front",
+      "price": 3900,
+      "cost": null,
+      "status": "active",
+      "description": "少女漫画のスクリーントーンで描いたハートとキラキラ。短丈・細身のベビーT。",
+      "material": "コットン100%",
+      "colors": [
+        { "name": "ホワイト", "hex": "#f6f2ec", "ink": "#e0607e" },
+        { "name": "ベビーブルー", "hex": "#cfe0f2", "ink": "#2c3e8f" },
+        { "name": "ブラック", "hex": "#1d1d1b", "ink": "#f4b6c8" }
+      ],
+      "sizes": ["S", "M", "L"],
+      "fulfillment": { "provider": "printful", "variantIds": {} }
+    },
+    {
+      "slug": "sekigaisen-longsleeve",
+      "name": "赤外線で送ります ロンT",
+      "type": "longsleeve",
+      "prints": [{ "side": "front", "design": "sekigaisen", "area": "full" }],
+      "hero": "front",
+      "finish": "vintage",
+      "price": 5500,
+      "cost": null,
+      "status": "active",
+      "description": "ガラケー同士で連絡先を交換していた頃のドット絵。送信中 3/8。",
+      "material": "コットン100%",
+      "colors": [
+        { "name": "エクリュ", "hex": "#ece6da", "ink": "#3b2a20" },
+        { "name": "ダークブラウン", "hex": "#3b2a20", "ink": "#ece6da" }
+      ],
+      "sizes": ["S", "M", "L", "XL"],
+      "fulfillment": { "provider": "printful", "variantIds": {} }
+    },
+    {
+      "slug": "teiden-quarter-zip",
+      "name": "低電力モード クォータージップ",
+      "type": "quarterzip",
+      "prints": [{ "side": "front", "design": "teiden", "area": "chest" }],
+      "hero": "front",
+      "price": 7900,
+      "cost": null,
+      "status": "active",
+      "description": "胸元に電池と「低電力モード」の小さな明朝。クルーネックの代わりに着るハーフジップ。",
+      "material": "コットン80% / ポリエステル20%",
+      "colors": [
+        { "name": "バーガンディ", "hex": "#5e1f2a", "ink": "#e8d9c4" },
+        { "name": "フォレストグリーン", "hex": "#2f3d2c", "ink": "#e8d9c4" },
+        { "name": "ヘザーグレー", "hex": "#a7a8aa", "ink": "#5e1f2a" }
+      ],
+      "sizes": ["S", "M", "L", "XL"],
+      "fulfillment": { "provider": "printful", "variantIds": {} }
+    },
+    {
+      "slug": "lowbatt-badge-set",
+      "name": "缶バッジ3個セット",
+      "type": "badges",
+      "prints": [{ "side": "front", "design": "badges", "area": "full" }],
+      "hero": "front",
+      "price": 990,
+      "cost": null,
+      "status": "active",
+      "description": "電池・圏外・レオパード柄ローバットの3個セット。バッグや服に付けてカスタム。",
+      "material": "ブリキ・安全ピン",
+      "colors": [{ "name": "ミックス", "hex": "#ece6da", "ink": "#1d1d1b" }],
+      "sizes": ["F"],
+      "fulfillment": { "provider": "printful", "variantIds": {} }
+    }
+  ]
+}

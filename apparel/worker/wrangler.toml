@@ -1,0 +1,14 @@
+name = "lowbatt-checkout"
+main = "index.mjs"
+compatibility_date = "2026-10-01"
+
+[vars]
+# 公開したストアのURL（決済後の戻り先・CORS許可元）
+STORE_URL = ""
+# "true" で Printful 注文を即確定。最初は空のまま（下書き）で運用し、内容を確認してから切り替える
+PRINTFUL_CONFIRM = ""
+
+# シークレットは次のコマンドで登録（このファイルには書かない）
+#   npx wrangler secret put STRIPE_SECRET_KEY
+#   npx wrangler secret put STRIPE_WEBHOOK_SECRET
+#   npx wrangler secret put PRINTFUL_API_KEY

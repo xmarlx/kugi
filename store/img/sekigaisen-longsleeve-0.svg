@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 940" color="#ece6da">
+<defs><linearGradient id="sekigaisen-longsleeve-0-front-shade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".10"/><stop offset=".5" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></linearGradient><filter id="sekigaisen-longsleeve-0-front-crack" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".09" numOctaves="2" seed="7" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  30 0 0 0 -6.3" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in"/></filter>
+<filter id="sekigaisen-longsleeve-0-front-wash"><feTurbulence type="fractalNoise" baseFrequency=".012 .02" numOctaves="2" seed="3"/><feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .5 -.18"/></filter><clipPath id="sekigaisen-longsleeve-0-front-clip"><path d="M400 110 Q500 175 600 110 L720 140 Q830 290 910 700 L840 722 L716 370 L715 870 L285 870 L284 370 L160 722 L90 700 Q170 290 280 140 Z"/></clipPath></defs>
+
+<path d="M400 110 Q500 175 600 110 L720 140 Q830 290 910 700 L840 722 L716 370 L715 870 L285 870 L284 370 L160 722 L90 700 Q170 290 280 140 Z" fill="currentColor" stroke="#000" stroke-opacity=".22" stroke-width="4" stroke-linejoin="round"/>
+<svg x="320" y="220" width="360" height="360" viewBox="0 0 1200 1000" preserveAspectRatio="xMidYMid meet" overflow="visible" filter="url(#sekigaisen-longsleeve-0-front-crack)">
+  
+  <defs>
+    <g id="sekigaisen-longsleeve-0-front-front-phone">
+      <rect x="120" y="-70" width="22" height="80" rx="6" fill="#3b2a20"/>
+      <rect x="0" y="0" width="170" height="230" rx="18" fill="#3b2a20"/>
+      <rect x="10" y="236" width="150" height="16" fill="#3b2a20"/>
+      <rect x="0" y="258" width="170" height="250" rx="18" fill="#3b2a20"/>
+    </g>
+  </defs>
+  <g transform="translate(150 140) rotate(-12)">
+    <use href="#sekigaisen-longsleeve-0-front-front-phone"/>
+    <rect x="24" y="28" width="122" height="146" rx="6" fill="#ece6da" fill-opacity=".9"/><rect x="40" y="48" width="22" height="22" fill="#3b2a20"/><rect x="70" y="48" width="60" height="10" fill="#3b2a20"/><rect x="70" y="64" width="40" height="10" fill="#3b2a20"/>
+    <g fill="#ece6da" fill-opacity=".75"><rect x="24" y="300" width="34" height="26"/><rect x="68" y="300" width="34" height="26"/><rect x="112" y="300" width="34" height="26"/><rect x="24" y="340" width="34" height="26"/><rect x="68" y="340" width="34" height="26"/><rect x="112" y="340" width="34" height="26"/><rect x="24" y="380" width="34" height="26"/><rect x="68" y="380" width="34" height="26"/><rect x="112" y="380" width="34" height="26"/><rect x="24" y="420" width="34" height="26"/><rect x="68" y="420" width="34" height="26"/><rect x="112" y="420" width="34" height="26"/></g>
+  </g>
+  <g transform="translate(880 105) rotate(12)">
+    <use href="#sekigaisen-longsleeve-0-front-front-phone"/>
+    <rect x="24" y="28" width="122" height="146" rx="6" fill="#ece6da" fill-opacity=".9"/><rect x="40" y="48" width="22" height="22" fill="#3b2a20"/><rect x="70" y="48" width="60" height="10" fill="#3b2a20"/><rect x="70" y="64" width="40" height="10" fill="#3b2a20"/>
+    <g fill="#ece6da" fill-opacity=".75"><rect x="24" y="300" width="34" height="26"/><rect x="68" y="300" width="34" height="26"/><rect x="112" y="300" width="34" height="26"/><rect x="24" y="340" width="34" height="26"/><rect x="68" y="340" width="34" height="26"/><rect x="112" y="340" width="34" height="26"/><rect x="24" y="380" width="34" height="26"/><rect x="68" y="380" width="34" height="26"/><rect x="112" y="380" width="34" height="26"/><rect x="24" y="420" width="34" height="26"/><rect x="68" y="420" width="34" height="26"/><rect x="112" y="420" width="34" height="26"/></g>
+  </g>
+  <g fill="#3b2a20">
+    <rect x="380" y="150" width="28" height="28"/><rect x="440" y="140" width="28" height="28"/><rect x="500" y="134" width="28" height="28"/><rect x="560" y="132" width="28" height="28"/><rect x="620" y="132" width="28" height="28"/><rect x="680" y="134" width="28" height="28"/><rect x="740" y="140" width="28" height="28"/><rect x="800" y="150" width="28" height="28"/>
+    <rect x="400" y="240" width="28" height="28"/><rect x="470" y="226" width="28" height="28"/><rect x="540" y="220" width="28" height="28"/><rect x="610" y="220" width="28" height="28"/><rect x="680" y="226" width="28" height="28"/><rect x="750" y="240" width="28" height="28"/>
+    <rect x="440" y="320" width="28" height="28"/><rect x="520" y="310" width="28" height="28"/><rect x="600" y="306" width="28" height="28"/><rect x="680" y="310" width="28" height="28"/><rect x="760" y="320" width="28" height="28"/>
+  </g>
+  <text x="600" y="740" text-anchor="middle" font-family="DotGothic16, monospace" font-size="104" fill="#3b2a20">赤外線で送ります</text>
+  <text x="600" y="820" text-anchor="middle" font-family="DotGothic16, monospace" font-size="40" letter-spacing="10" fill="#3b2a20">SEND VIA INFRARED ▶</text>
+  <rect x="300" y="870" width="600" height="70" fill="none" stroke="#3b2a20" stroke-width="10"/>
+  <g fill="#3b2a20"><rect x="318" y="886" width="56" height="38"/><rect x="384" y="886" width="56" height="38"/><rect x="450" y="886" width="56" height="38"/></g>
+  <text x="930" y="925" font-family="DotGothic16, monospace" font-size="40" fill="#3b2a20">3/8</text>
+</svg>
+<rect width="1000" height="940" filter="url(#sekigaisen-longsleeve-0-front-wash)" clip-path="url(#sekigaisen-longsleeve-0-front-clip)" opacity=".22"/>
+<path d="M400 110 Q500 175 600 110 L720 140 Q830 290 910 700 L840 722 L716 370 L715 870 L285 870 L284 370 L160 722 L90 700 Q170 290 280 140 Z" fill="url(#sekigaisen-longsleeve-0-front-shade)"/>
+<path d="M400 110 Q500 175 600 110" fill="none" stroke="#000" stroke-opacity=".22" stroke-width="4"/><path d="M286 845 L714 845 M97 678 L165 700 M903 678 L835 700" fill="none" stroke="#000" stroke-opacity=".22" stroke-width="4"/>
+</svg>

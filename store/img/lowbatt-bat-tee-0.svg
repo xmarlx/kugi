@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 940" color="#f1ede4">
+<defs><linearGradient id="lowbatt-bat-tee-0-back-shade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".10"/><stop offset=".5" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></linearGradient><filter id="lowbatt-bat-tee-0-back-crack" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".09" numOctaves="2" seed="7" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  30 0 0 0 -6.3" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in"/></filter>
+<filter id="lowbatt-bat-tee-0-back-wash"><feTurbulence type="fractalNoise" baseFrequency=".012 .02" numOctaves="2" seed="3"/><feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .5 -.18"/></filter><clipPath id="lowbatt-bat-tee-0-back-clip"><path d="M395 120 Q500 128 605 120 L745 150 L885 335 L792 398 L738 340 L738 800 L262 800 L262 340 L208 398 L115 335 L255 150 Z"/></clipPath></defs>
+
+<path d="M395 120 Q500 128 605 120 L745 150 L885 335 L792 398 L738 340 L738 800 L262 800 L262 340 L208 398 L115 335 L255 150 Z" fill="currentColor" stroke="#000" stroke-opacity=".22" stroke-width="4" stroke-linejoin="round"/>
+<svg x="300" y="190" width="400" height="470" viewBox="0 0 1200 1400" preserveAspectRatio="xMidYMid meet" overflow="visible" filter="url(#lowbatt-bat-tee-0-back-crack)">
+  
+  <rect x="330" y="80" width="520" height="210" rx="40" fill="none" stroke="#1d1d1b" stroke-width="30"/>
+  <rect x="850" y="140" width="50" height="90" rx="10" fill="#1d1d1b"/>
+  <rect x="362" y="112" width="80" height="146" rx="14" fill="#e5412b"/>
+  <path d="M540 290 L552 380 M660 290 L648 380" stroke="#1d1d1b" stroke-width="26" stroke-linecap="round"/>
+  <path d="M600 380 C 390 380 285 530 315 710 C 270 680 210 710 198 770 C 255 746 300 776 312 830 C 336 950 450 1040 600 1040 C 750 1040 864 950 888 830 C 900 776 945 746 1002 770 C 990 710 930 680 885 710 C 915 530 810 380 600 380 Z" fill="#1d1d1b"/>
+  <path d="M450 1016 L414 1136 L528 1046 Z M750 1016 L786 1136 L672 1046 Z" fill="#1d1d1b"/>
+  <path d="M480 860 Q516 824 552 860 M648 860 Q684 824 720 860" fill="none" stroke="#f1ede4" stroke-width="22" stroke-linecap="round"/>
+  <circle cx="450" cy="926" r="30" fill="#f29bb0"/><circle cx="750" cy="926" r="30" fill="#f29bb0"/>
+  <g font-family="DotGothic16, monospace" fill="#1d1d1b"><text x="930" y="470" font-size="80">z</text><text x="1000" y="400" font-size="60">z</text><text x="1050" y="345" font-size="44">z</text></g>
+  <text x="600" y="1290" text-anchor="middle" font-family="DotGothic16, monospace" font-size="120" fill="#1d1d1b">ちょっと充電中</text>
+  <text x="600" y="1375" text-anchor="middle" font-family="DotGothic16, monospace" font-size="44" letter-spacing="14" fill="#1d1d1b">LOWBATT CLUB</text>
+</svg>
+<rect width="1000" height="940" filter="url(#lowbatt-bat-tee-0-back-wash)" clip-path="url(#lowbatt-bat-tee-0-back-clip)" opacity=".22"/>
+<path d="M395 120 Q500 128 605 120 L745 150 L885 335 L792 398 L738 340 L738 800 L262 800 L262 340 L208 398 L115 335 L255 150 Z" fill="url(#lowbatt-bat-tee-0-back-shade)"/>
+<path d="M400 110 Q500 128 600 110" fill="none" stroke="#000" stroke-opacity=".22" stroke-width="4"/>
+</svg>

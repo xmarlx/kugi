@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 940" color="#cfe0f2">
+<defs><linearGradient id="kengai-heart-baby-tee-1-front-shade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".10"/><stop offset=".5" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></linearGradient><clipPath id="kengai-heart-baby-tee-1-front-clip"><path d="M415 140 Q500 185 585 140 L665 158 L745 262 L688 300 L648 262 L640 520 Q644 590 652 640 L348 640 Q356 590 360 520 L352 262 L312 300 L255 262 L335 158 Z"/></clipPath></defs>
+
+<path d="M415 140 Q500 185 585 140 L665 158 L745 262 L688 300 L648 262 L640 520 Q644 590 652 640 L348 640 Q356 590 360 520 L352 262 L312 300 L255 262 L335 158 Z" fill="currentColor" stroke="#000" stroke-opacity=".22" stroke-width="4" stroke-linejoin="round"/>
+<svg x="372" y="215" width="256" height="256" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet" overflow="visible">
+  
+  <defs>
+    <pattern id="kengai-heart-baby-tee-1-front-front-tone" width="22" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="11" cy="11" r="5.5" fill="#2c3e8f"/></pattern>
+    <path id="kengai-heart-baby-tee-1-front-front-spark" d="M0 -60 C 8 -12 12 -8 60 0 C 12 8 8 12 0 60 C -8 12 -12 8 -60 0 C -12 -8 -8 -12 0 -60 Z"/>
+  </defs>
+  <text x="500" y="170" text-anchor="middle" font-family="DotGothic16, monospace" font-size="84" fill="#2c3e8f">ただいま圏外中♡</text>
+  <path d="M500 860 C 180 660 120 460 260 340 C 360 255 470 300 500 370 C 530 300 640 255 740 340 C 880 460 820 660 500 860 Z" fill="url(#kengai-heart-baby-tee-1-front-front-tone)" stroke="#2c3e8f" stroke-width="16" stroke-linejoin="round"/>
+  <path d="M310 420 C 330 380 370 360 410 365" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round"/>
+  <g fill="#2c3e8f">
+    <use href="#kengai-heart-baby-tee-1-front-front-spark" transform="translate(150 300) scale(1.1)"/>
+    <use href="#kengai-heart-baby-tee-1-front-front-spark" transform="translate(860 280) scale(.8)"/>
+    <use href="#kengai-heart-baby-tee-1-front-front-spark" transform="translate(860 720) scale(1.2)"/>
+    <use href="#kengai-heart-baby-tee-1-front-front-spark" transform="translate(130 760) scale(.6)"/>
+    <use href="#kengai-heart-baby-tee-1-front-front-spark" transform="translate(700 180) scale(.45)"/>
+  </g>
+  <text x="500" y="960" text-anchor="middle" font-family="DotGothic16, monospace" font-size="44" letter-spacing="8" fill="#2c3e8f">low battery, high mood</text>
+</svg>
+
+<path d="M415 140 Q500 185 585 140 L665 158 L745 262 L688 300 L648 262 L640 520 Q644 590 652 640 L348 640 Q356 590 360 520 L352 262 L312 300 L255 262 L335 158 Z" fill="url(#kengai-heart-baby-tee-1-front-shade)"/>
+<path d="M415 140 Q500 185 585 140" fill="none" stroke="#000" stroke-opacity=".22" stroke-width="4"/>
+</svg>

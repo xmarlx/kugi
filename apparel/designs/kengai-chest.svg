@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300">
+  <!-- 圏外（胸元）：電波ゼロ本のアンテナ表示 -->
+  <g fill="none" stroke="{{INK}}" stroke-width="12" stroke-linejoin="round">
+    <path d="M40 60 L100 60 L70 104 Z" fill="{{INK}}"/>
+    <line x1="70" y1="90" x2="70" y2="220"/>
+    <rect x="115" y="185" width="26" height="35"/><rect x="158" y="155" width="26" height="65"/><rect x="201" y="125" width="26" height="95"/>
+  </g>
+  <text x="260" y="215" font-family="DotGothic16, monospace" font-size="110" fill="{{INK}}">圏外</text>
+</svg>
