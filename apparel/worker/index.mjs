@@ -1,16 +1,20 @@
 // 決済・受注自動化 Worker（Cloudflare Workers）
 //   POST /checkout  カート → Stripe Checkout セッションを作り、決済URLを返す
-//   POST /webhook   Stripe の支払い完了通知 → Printful に製造・発送を発注
+//   POST /webhook   Stripe の支払い完了通知 → Printful / Printify に製造・発送を発注（fulfillment.mjs）
 // 必要な環境変数（wrangler secret put で登録）:
-//   STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, PRINTFUL_API_KEY
+//   STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
+//   Printful を使う商品があるとき: PRINTFUL_API_KEY
+//   Printify を使う商品があるとき: PRINTIFY_API_TOKEN
 // 任意の環境変数（wrangler.toml の [vars]）:
-//   STORE_URL       例 https://example.github.io/kugi/store
-//   PRINTFUL_CONFIRM "true" で Printful の注文を即確定（既定は下書き＝人が確認してから確定）
+//   STORE_URL            例 https://example.github.io/kugi/store
+//   PRINTFUL_CONFIRM     "true" で Printful の注文を即確定（既定は下書き＝人が確認してから確定）
+//   PRINTIFY_SHOP_ID     Printify のショップID（Printify を使う商品があるとき必須）
+//   PRINTIFY_AUTO_PRODUCE "true" で Printify の注文を作成後すぐ製造へ（既定は管理画面で確認してから）
 import catalog from "../data/products.json" with { type: "json" };
-import { resolveCart, cartTotals, cartToMetadata, cartFromMetadata, variantKey } from "../lib/catalog.mjs";
+import { resolveCart, cartTotals, cartToMetadata } from "../lib/catalog.mjs";
+import { fulfill } from "./fulfillment.mjs";
 
 const STRIPE_API = "https://api.stripe.com/v1";
-const PRINTFUL_API = "https://api.printful.com";
 
 export default {
   async fetch(request, env) {
@@ -121,51 +125,12 @@ async function webhook(request, env) {
   const session = event.data.object;
   if (session.payment_status !== "paid") return new Response("not paid");
 
-  const order = buildPrintfulOrder(session, catalog);
-  if (!order.items.length) {
-    console.warn(`Printful 未連携の商品のみの注文: ${session.id}（手動で発注してください）`);
-    return new Response("no fulfillable items");
-  }
-  const confirm = env.PRINTFUL_CONFIRM === "true" ? "?confirm=true" : "";
-  const res = await fetch(`${PRINTFUL_API}/orders${confirm}`, {
-    method: "POST",
-    headers: { authorization: `Bearer ${env.PRINTFUL_API_KEY}`, "content-type": "application/json" },
-    body: JSON.stringify(order),
-  });
-  if (!res.ok) {
+  try {
+    const { providers, unmapped } = await fulfill(env, session, catalog);
+    return new Response(`ok: ${providers.join(",") || "なし"}${unmapped.length ? ` / 手動発注 ${unmapped.length}件` : ""}`);
+  } catch (e) {
     // 500 を返すと Stripe が時間をおいて再送する
-    console.error(`Printful 発注失敗 ${session.id}: ${res.status} ${await res.text()}`);
+    console.error(`発注失敗 ${session.id}: ${e.message}`);
     return new Response("fulfillment failed", { status: 500 });
   }
-  return new Response("ok");
-}
-
-export function buildPrintfulOrder(session, catalog) {
-  const ship = session.collected_information?.shipping_details || session.shipping_details || {};
-  const addr = ship.address || {};
-  const items = [];
-  const unmapped = [];
-  for (const it of cartFromMetadata(session.metadata)) {
-    const p = (catalog.products || []).find((x) => x.slug === it.slug);
-    const color = p?.colors[it.color];
-    const id = color && p.fulfillment?.variantIds?.[variantKey(color.name, it.size)];
-    if (id) items.push({ sync_variant_id: id, quantity: it.qty });
-    else unmapped.push(`${it.slug}:${it.color}:${it.size}`);
-  }
-  if (unmapped.length) console.warn(`variantIds 未設定のため発注から除外: ${unmapped.join(", ")}（注文 ${session.id}）`);
-  return {
-    external_id: session.id.slice(-32), // Printful の external_id は32文字まで。同じ注文の二重発注防止に使う
-    recipient: {
-      name: ship.name || session.customer_details?.name || "",
-      address1: addr.line1 || "",
-      address2: addr.line2 || "",
-      city: addr.city || "",
-      state_name: addr.state || "",
-      country_code: addr.country || "JP",
-      zip: addr.postal_code || "",
-      phone: session.customer_details?.phone || "",
-      email: session.customer_details?.email || "",
-    },
-    items,
-  };
 }

@@ -4,6 +4,7 @@ export const GARMENT_TYPES = ["tee", "babytee", "longsleeve", "hoodie", "quarter
 export const SIDES = ["front", "back"];
 export const AREAS = ["full", "chest"];
 export const MAX_QTY = 10;
+export const FULFILLMENT_PROVIDERS = ["printful", "printify"];
 
 export function validateCatalog(catalog, { designExists = () => true } = {}) {
   const errors = [];
@@ -41,11 +42,15 @@ export function validateCatalog(catalog, { designExists = () => true } = {}) {
     if (!Array.isArray(p.sizes) || !p.sizes.length) errors.push(`${at}: sizes が空`);
     if (p.cost == null) warnings.push(`${at}: cost（原価）未入力のため粗利を計算できません`);
     else if (p.cost >= p.price) warnings.push(`${at}: cost が price 以上です`);
-    if (p.status === "active") {
-      const ids = p.fulfillment?.variantIds || {};
+    const f = p.fulfillment || {};
+    if (!FULFILLMENT_PROVIDERS.includes(f.provider)) errors.push(`${at}: fulfillment.provider は ${FULFILLMENT_PROVIDERS.join("/")}`);
+    else if (p.status === "active") {
+      const label = f.provider === "printify" ? "Printify" : "Printful";
+      if (f.provider === "printify" && !f.productId) warnings.push(`${at}: Printify の productId 未設定（自動発注されません）`);
+      const ids = f.variantIds || {};
       const missing = [];
       for (const c of p.colors || []) for (const s of p.sizes || []) if (!ids[variantKey(c.name, s)]) missing.push(variantKey(c.name, s));
-      if (missing.length) warnings.push(`${at}: Printful の variantIds 未設定 ${missing.length}件（自動発注されません）`);
+      if (missing.length) warnings.push(`${at}: ${label} の variantIds 未設定 ${missing.length}件（自動発注されません）`);
     }
   }
   return { errors, warnings };
