@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500">
+  <!-- 圏外：ガラケーの電波表示と縦書きの大きな明朝 -->
+  <g fill="none" stroke="{{INK}}" stroke-width="14" stroke-linejoin="round">
+    <path d="M110 120 L170 120 L140 168 Z" fill="{{INK}}"/>
+    <line x1="140" y1="150" x2="140" y2="290"/>
+    <rect x="190" y="250" width="30" height="40"/>
+    <rect x="240" y="215" width="30" height="75"/>
+    <rect x="290" y="180" width="30" height="110"/>
+    <rect x="340" y="145" width="30" height="145"/>
+  </g>
+  <text x="430" y="290" font-family="DotGothic16, monospace" font-size="72" fill="{{INK}}">圏外</text>
+  <g font-family="'Zen Old Mincho', 'Hiragino Mincho ProN', 'Yu Mincho', serif" font-weight="900" fill="{{INK}}" text-anchor="middle">
+    <text x="560" y="860" font-size="560">圏</text>
+    <text x="560" y="1400" font-size="560">外</text>
+  </g>
+  <text x="1110" y="420" writing-mode="vertical-rl" font-family="DotGothic16, monospace" font-size="48" letter-spacing="6" fill="{{INK}}">電波の届かない場所にいます</text>
+  <text x="600" y="1480" text-anchor="middle" font-family="DotGothic16, monospace" font-size="40" letter-spacing="8" fill="{{INK}}">LOWBATT / NO SERVICE</text>
+</svg>

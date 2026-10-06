@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <!-- ローバット（胸元）：電池にぶら下がって眠るコウモリ -->
+  <rect x="110" y="40" width="170" height="70" rx="14" fill="none" stroke="{{INK}}" stroke-width="12"/>
+  <rect x="280" y="60" width="16" height="30" rx="4" fill="{{INK}}"/>
+  <rect x="122" y="52" width="26" height="46" rx="5" fill="#e5412b"/>
+  <path d="M180 110 L184 140 M220 110 L216 140" stroke="{{INK}}" stroke-width="10" stroke-linecap="round"/>
+  <path d="M200 140 C 130 140 95 190 105 250 C 90 240 70 250 66 270 C 85 262 100 272 104 290 C 112 330 150 360 200 360 C 250 360 288 330 296 290 C 300 272 315 262 334 270 C 330 250 310 240 295 250 C 305 190 270 140 200 140 Z" fill="{{INK}}"/>
+  <path d="M150 352 L138 392 L176 362 Z M250 352 L262 392 L224 362 Z" fill="{{INK}}"/>
+  <path d="M160 300 Q172 288 184 300 M216 300 Q228 288 240 300" fill="none" stroke="{{BG}}" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="150" cy="322" r="10" fill="#f29bb0"/><circle cx="250" cy="322" r="10" fill="#f29bb0"/>
+</svg>

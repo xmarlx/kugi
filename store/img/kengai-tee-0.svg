@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 940" color="#2b2a28">
+<defs><linearGradient id="kengai-tee-0-back-shade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".10"/><stop offset=".5" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></linearGradient><filter id="kengai-tee-0-back-crack" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".09" numOctaves="2" seed="7" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  30 0 0 0 -6.3" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in"/></filter>
+<filter id="kengai-tee-0-back-wash"><feTurbulence type="fractalNoise" baseFrequency=".012 .02" numOctaves="2" seed="3"/><feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .5 -.18"/></filter><clipPath id="kengai-tee-0-back-clip"><path d="M395 120 Q500 128 605 120 L745 150 L885 335 L792 398 L738 340 L738 800 L262 800 L262 340 L208 398 L115 335 L255 150 Z"/></clipPath></defs>
+
+<path d="M395 120 Q500 128 605 120 L745 150 L885 335 L792 398 L738 340 L738 800 L262 800 L262 340 L208 398 L115 335 L255 150 Z" fill="currentColor" stroke="#000" stroke-opacity=".22" stroke-width="4" stroke-linejoin="round"/>
+<svg x="300" y="190" width="400" height="470" viewBox="0 0 1200 1500" preserveAspectRatio="xMidYMid meet" overflow="visible" filter="url(#kengai-tee-0-back-crack)">
+  
+  <g fill="none" stroke="#ece6da" stroke-width="14" stroke-linejoin="round">
+    <path d="M110 120 L170 120 L140 168 Z" fill="#ece6da"/>
+    <line x1="140" y1="150" x2="140" y2="290"/>
+    <rect x="190" y="250" width="30" height="40"/>
+    <rect x="240" y="215" width="30" height="75"/>
+    <rect x="290" y="180" width="30" height="110"/>
+    <rect x="340" y="145" width="30" height="145"/>
+  </g>
+  <text x="430" y="290" font-family="DotGothic16, monospace" font-size="72" fill="#ece6da">圏外</text>
+  <g font-family="'Zen Old Mincho', 'Hiragino Mincho ProN', 'Yu Mincho', serif" font-weight="900" fill="#ece6da" text-anchor="middle">
+    <text x="560" y="860" font-size="560">圏</text>
+    <text x="560" y="1400" font-size="560">外</text>
+  </g>
+  <text x="1110" y="420" writing-mode="vertical-rl" font-family="DotGothic16, monospace" font-size="48" letter-spacing="6" fill="#ece6da">電波の届かない場所にいます</text>
+  <text x="600" y="1480" text-anchor="middle" font-family="DotGothic16, monospace" font-size="40" letter-spacing="8" fill="#ece6da">LOWBATT / NO SERVICE</text>
+</svg>
+<rect width="1000" height="940" filter="url(#kengai-tee-0-back-wash)" clip-path="url(#kengai-tee-0-back-clip)" opacity=".22"/>
+<path d="M395 120 Q500 128 605 120 L745 150 L885 335 L792 398 L738 340 L738 800 L262 800 L262 340 L208 398 L115 335 L255 150 Z" fill="url(#kengai-tee-0-back-shade)"/>
+<path d="M400 110 Q500 128 600 110" fill="none" stroke="#000" stroke-opacity=".22" stroke-width="4"/>
+</svg>

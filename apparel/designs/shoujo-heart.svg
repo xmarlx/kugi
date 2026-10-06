@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+  <!-- 少女漫画コア：スクリーントーンのハートとキラキラ -->
+  <defs>
+    <pattern id="tone" width="22" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="11" cy="11" r="5.5" fill="{{INK}}"/></pattern>
+    <path id="spark" d="M0 -60 C 8 -12 12 -8 60 0 C 12 8 8 12 0 60 C -8 12 -12 8 -60 0 C -12 -8 -8 -12 0 -60 Z"/>
+  </defs>
+  <text x="500" y="170" text-anchor="middle" font-family="DotGothic16, monospace" font-size="84" fill="{{INK}}">ただいま圏外中♡</text>
+  <path d="M500 860 C 180 660 120 460 260 340 C 360 255 470 300 500 370 C 530 300 640 255 740 340 C 880 460 820 660 500 860 Z" fill="url(#tone)" stroke="{{INK}}" stroke-width="16" stroke-linejoin="round"/>
+  <path d="M310 420 C 330 380 370 360 410 365" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round"/>
+  <g fill="{{INK}}">
+    <use href="#spark" transform="translate(150 300) scale(1.1)"/>
+    <use href="#spark" transform="translate(860 280) scale(.8)"/>
+    <use href="#spark" transform="translate(860 720) scale(1.2)"/>
+    <use href="#spark" transform="translate(130 760) scale(.6)"/>
+    <use href="#spark" transform="translate(700 180) scale(.45)"/>
+  </g>
+  <text x="500" y="960" text-anchor="middle" font-family="DotGothic16, monospace" font-size="44" letter-spacing="8" fill="{{INK}}">low battery, high mood</text>
+</svg>

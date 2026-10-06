@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000">
+  <!-- 赤外線通信：向かい合う2台のガラケー（ドット絵） -->
+  <defs>
+    <g id="phone">
+      <rect x="120" y="-70" width="22" height="80" rx="6" fill="{{INK}}"/>
+      <rect x="0" y="0" width="170" height="230" rx="18" fill="{{INK}}"/>
+      <rect x="10" y="236" width="150" height="16" fill="{{INK}}"/>
+      <rect x="0" y="258" width="170" height="250" rx="18" fill="{{INK}}"/>
+    </g>
+  </defs>
+  <g transform="translate(150 140) rotate(-12)">
+    <use href="#phone"/>
+    <rect x="24" y="28" width="122" height="146" rx="6" fill="{{BG}}" fill-opacity=".9"/><rect x="40" y="48" width="22" height="22" fill="{{INK}}"/><rect x="70" y="48" width="60" height="10" fill="{{INK}}"/><rect x="70" y="64" width="40" height="10" fill="{{INK}}"/>
+    <g fill="{{BG}}" fill-opacity=".75"><rect x="24" y="300" width="34" height="26"/><rect x="68" y="300" width="34" height="26"/><rect x="112" y="300" width="34" height="26"/><rect x="24" y="340" width="34" height="26"/><rect x="68" y="340" width="34" height="26"/><rect x="112" y="340" width="34" height="26"/><rect x="24" y="380" width="34" height="26"/><rect x="68" y="380" width="34" height="26"/><rect x="112" y="380" width="34" height="26"/><rect x="24" y="420" width="34" height="26"/><rect x="68" y="420" width="34" height="26"/><rect x="112" y="420" width="34" height="26"/></g>
+  </g>
+  <g transform="translate(880 105) rotate(12)">
+    <use href="#phone"/>
+    <rect x="24" y="28" width="122" height="146" rx="6" fill="{{BG}}" fill-opacity=".9"/><rect x="40" y="48" width="22" height="22" fill="{{INK}}"/><rect x="70" y="48" width="60" height="10" fill="{{INK}}"/><rect x="70" y="64" width="40" height="10" fill="{{INK}}"/>
+    <g fill="{{BG}}" fill-opacity=".75"><rect x="24" y="300" width="34" height="26"/><rect x="68" y="300" width="34" height="26"/><rect x="112" y="300" width="34" height="26"/><rect x="24" y="340" width="34" height="26"/><rect x="68" y="340" width="34" height="26"/><rect x="112" y="340" width="34" height="26"/><rect x="24" y="380" width="34" height="26"/><rect x="68" y="380" width="34" height="26"/><rect x="112" y="380" width="34" height="26"/><rect x="24" y="420" width="34" height="26"/><rect x="68" y="420" width="34" height="26"/><rect x="112" y="420" width="34" height="26"/></g>
+  </g>
+  <g fill="{{INK}}">
+    <rect x="380" y="150" width="28" height="28"/><rect x="440" y="140" width="28" height="28"/><rect x="500" y="134" width="28" height="28"/><rect x="560" y="132" width="28" height="28"/><rect x="620" y="132" width="28" height="28"/><rect x="680" y="134" width="28" height="28"/><rect x="740" y="140" width="28" height="28"/><rect x="800" y="150" width="28" height="28"/>
+    <rect x="400" y="240" width="28" height="28"/><rect x="470" y="226" width="28" height="28"/><rect x="540" y="220" width="28" height="28"/><rect x="610" y="220" width="28" height="28"/><rect x="680" y="226" width="28" height="28"/><rect x="750" y="240" width="28" height="28"/>
+    <rect x="440" y="320" width="28" height="28"/><rect x="520" y="310" width="28" height="28"/><rect x="600" y="306" width="28" height="28"/><rect x="680" y="310" width="28" height="28"/><rect x="760" y="320" width="28" height="28"/>
+  </g>
+  <text x="600" y="740" text-anchor="middle" font-family="DotGothic16, monospace" font-size="104" fill="{{INK}}">赤外線で送ります</text>
+  <text x="600" y="820" text-anchor="middle" font-family="DotGothic16, monospace" font-size="40" letter-spacing="10" fill="{{INK}}">SEND VIA INFRARED ▶</text>
+  <rect x="300" y="870" width="600" height="70" fill="none" stroke="{{INK}}" stroke-width="10"/>
+  <g fill="{{INK}}"><rect x="318" y="886" width="56" height="38"/><rect x="384" y="886" width="56" height="38"/><rect x="450" y="886" width="56" height="38"/></g>
+  <text x="930" y="925" font-family="DotGothic16, monospace" font-size="40" fill="{{INK}}">3/8</text>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <!-- カレッジロゴ：アーチ状の LOWBATT と校章風のコウモリ -->
+  <defs><path id="arc" d="M120 560 A 560 440 0 0 1 1080 560"/></defs>
+  <text font-family="Graduate, 'Rockwell', 'Courier New', serif" font-size="210" fill="{{INK}}" letter-spacing="6" text-anchor="middle"><textPath href="#arc" startOffset="50%">LOWBATT</textPath></text>
+  <g transform="translate(600 610) scale(.62)" fill="{{INK}}">
+    <path d="M0 -60 C -110 -60 -160 20 -150 110 C -175 95 -205 110 -210 140 C -180 128 -158 142 -150 170 C -135 230 -75 270 0 270 C 75 270 135 230 150 170 C 158 142 180 128 210 140 C 205 110 175 95 150 110 C 160 20 110 -60 0 -60 Z"/>
+    <path d="M-75 -40 L-95 -120 L-30 -60 Z M75 -40 L95 -120 L30 -60 Z"/>
+  </g>
+  <path d="M552 680 Q570 664 588 680 M612 680 Q630 664 648 680" fill="none" stroke="{{BG}}" stroke-width="9" stroke-linecap="round"/>
+  <text x="600" y="840" text-anchor="middle" font-family="Graduate, 'Rockwell', serif" font-size="60" letter-spacing="10" fill="{{INK}}">DEPT. OF OFFLINE</text>
+  <text x="250" y="760" text-anchor="middle" font-family="Graduate, serif" font-size="56" fill="{{INK}}">EST.</text>
+  <text x="950" y="760" text-anchor="middle" font-family="Graduate, serif" font-size="56" fill="{{INK}}">2026</text>
+</svg>
