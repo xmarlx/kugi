@@ -4,11 +4,16 @@ compatibility_date = "2026-10-01"
 
 [vars]
 # 公開したストアのURL（決済後の戻り先・CORS許可元）
-STORE_URL = ""
+STORE_URL = "https://xmarlx.github.io/kugi/store"
 # "true" で Printful 注文を即確定。最初は空のまま（下書き）で運用し、内容を確認してから切り替える
 PRINTFUL_CONFIRM = ""
+# Printify のショップID（Printify を使う商品があるとき必須。Printify の API で GET /v1/shops.json で確認できる）
+PRINTIFY_SHOP_ID = ""
+# "true" で Printify 注文を作成後すぐ製造へ回す。空なら Printify 管理画面で確認してから製造へ
+PRINTIFY_AUTO_PRODUCE = ""
 
 # シークレットは次のコマンドで登録（このファイルには書かない）
 #   npx wrangler secret put STRIPE_SECRET_KEY
 #   npx wrangler secret put STRIPE_WEBHOOK_SECRET
-#   npx wrangler secret put PRINTFUL_API_KEY
+#   npx wrangler secret put PRINTFUL_API_KEY     # Printful を使う場合
+#   npx wrangler secret put PRINTIFY_API_TOKEN   # Printify を使う場合
